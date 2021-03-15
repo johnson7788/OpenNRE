@@ -18,7 +18,10 @@ class SentenceRE(nn.Module):
                  lr=0.1, 
                  weight_decay=1e-5, 
                  warmup_step=300,
-                 opt='sgd'):
+                 opt='sgd',
+                 parallel = False,     #是否使用并发的GPU
+                 num_workers = 0    # Dataloader 的并发数,只主进程加载
+                 ):
     
         super().__init__()
         self.max_epoch = max_epoch
@@ -29,7 +32,7 @@ class SentenceRE(nn.Module):
                 model.rel2id,
                 model.sentence_encoder.tokenize,
                 batch_size,
-                True)
+                shuffle=True, num_workers=num_workers)
 
         if val_path != None:
             self.val_loader = SentenceRELoader(
@@ -37,7 +40,7 @@ class SentenceRE(nn.Module):
                 model.rel2id,
                 model.sentence_encoder.tokenize,
                 batch_size,
-                False)
+                shuffle=False, num_workers=num_workers)
         
         if test_path != None:
             self.test_loader = SentenceRELoader(
@@ -45,11 +48,14 @@ class SentenceRE(nn.Module):
                 model.rel2id,
                 model.sentence_encoder.tokenize,
                 batch_size,
-                False
+                shuffle=False, num_workers=num_workers
             )
         # Model
         self.model = model
-        self.parallel_model = nn.DataParallel(self.model)
+        if parallel:
+            self.parallel_model = nn.DataParallel(self.model)
+        else:
+            self.parallel_model = None
         # Criterion
         self.criterion = nn.CrossEntropyLoss()
         # Params and optimizer
@@ -111,11 +117,15 @@ class SentenceRE(nn.Module):
                             pass
                 label = data[0]
                 args = data[1:]
-                logits = self.parallel_model(*args)
+                # logits shape [batch_size, num_classes]
+                if self.parallel_model:
+                    logits = self.parallel_model(*args)
+                else:
+                    logits = self.model(*args)
                 loss = self.criterion(logits, label)
                 score, pred = logits.max(-1) # (B)
                 acc = float((pred == label).long().sum()) / label.size(0)
-                # Log
+                #记录日志
                 avg_loss.update(loss.item(), 1)
                 avg_acc.update(acc, 1)
                 t.set_postfix(loss=avg_loss.avg, acc=avg_acc.avg)
@@ -153,8 +163,11 @@ class SentenceRE(nn.Module):
                         except:
                             pass
                 label = data[0]
-                args = data[1:]        
-                logits = self.parallel_model(*args)
+                args = data[1:]
+                if self.parallel_model:
+                    logits = self.parallel_model(*args)
+                else:
+                    logits = self.model(*args)
                 score, pred = logits.max(-1) # (B)
                 # Save result
                 for i in range(pred.size(0)):

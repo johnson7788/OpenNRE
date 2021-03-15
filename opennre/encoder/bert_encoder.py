@@ -28,7 +28,7 @@ class BERTEncoder(nn.Module):
         Return:
             (B, H), representations for sentences
         """
-        _, x = self.bert(token, attention_mask=att_mask)
+        _, x = self.bert(token, attention_mask=att_mask, return_dict=False)
         return x
 
     def tokenize(self, item):
@@ -116,22 +116,26 @@ class BERTEntityEncoder(nn.Module):
     def forward(self, token, att_mask, pos1, pos2):
         """
         Args:
-            token: (B, L), index of tokens
-            att_mask: (B, L), attention mask (1 for contents and 0 for padding)
-            pos1: (B, 1), position of the head entity starter
-            pos2: (B, 1), position of the tail entity starter
+            token: (Batch_size, seq_length), index of tokens
+            att_mask: (Batch_size, seq_length), attention mask (1 for contents and 0 for padding)
+            pos1: (Batch_size, 1), position of the head entity starter, [batch_size, 1]
+            pos2: (Batch_size, 1), position of the tail entity starter, [batch_size, 1]
         Return:
             (B, 2H), representations for sentences
         """
-        hidden, _ = self.bert(token, attention_mask=att_mask)
-        # Get entity start hidden state
+        # hidden [batch_size, seq_len, output_demision]
+        hidden, _ = self.bert(token, attention_mask=att_mask, return_dict=False)
+        # 初始化一个向量 onehot_head shape [batch_size, seq_len]
         onehot_head = torch.zeros(hidden.size()[:2]).float().to(hidden.device)  # (B, L)
         onehot_tail = torch.zeros(hidden.size()[:2]).float().to(hidden.device)  # (B, L)
+        #获取实体位置的向量,
         onehot_head = onehot_head.scatter_(1, pos1, 1)
         onehot_tail = onehot_tail.scatter_(1, pos2, 1)
+        #head_hidden,tail_hidden --> [batch_size, hidden_demision], [16,768]
         head_hidden = (onehot_head.unsqueeze(2) * hidden).sum(1)  # (B, H)
         tail_hidden = (onehot_tail.unsqueeze(2) * hidden).sum(1)  # (B, H)
-        x = torch.cat([head_hidden, tail_hidden], 1)  # (B, 2H)
+        #把实体的头和尾拼接起来, x shape  (Batch_size, 2*hidden_demision)
+        x = torch.cat([head_hidden, tail_hidden], 1)
         x = self.linear(x)
         return x
 

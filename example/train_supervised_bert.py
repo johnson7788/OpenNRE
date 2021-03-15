@@ -36,7 +36,7 @@ parser.add_argument('--rel2id_file', default='', type=str,
         help='关系到id的映射文件')
 
 # Hyper-parameters
-parser.add_argument('--batch_size', default=64, type=int,
+parser.add_argument('--batch_size', default=16, type=int,
         help='Batch size')
 parser.add_argument('--lr', default=2e-5, type=float,
         help='Learning rate')
@@ -111,17 +111,18 @@ framework = opennre.framework.SentenceRE(
     opt='adamw'
 )
 
-# Train the model
-if not args.only_test:
-    framework.train_model('micro_f1')
+if __name__ == '__main__':
+    # Train the model
+    if not args.only_test:
+        framework.train_model('micro_f1')
 
-# Test
-framework.load_state_dict(torch.load(ckpt)['state_dict'])
-result = framework.eval_model(framework.test_loader)
+    # Test
+    framework.load_state_dict(torch.load(ckpt)['state_dict'])
+    result = framework.eval_model(framework.test_loader)
 
-# Print the result
-logging.info('Test set results:')
-logging.info('Accuracy: {}'.format(result['acc']))
-logging.info('Micro precision: {}'.format(result['micro_p']))
-logging.info('Micro recall: {}'.format(result['micro_r']))
-logging.info('Micro F1: {}'.format(result['micro_f1']))
+    # Print the result
+    logging.info('Test set results:')
+    logging.info('Accuracy: {}'.format(result['acc']))
+    logging.info('Micro precision: {}'.format(result['micro_p']))
+    logging.info('Micro recall: {}'.format(result['micro_r']))
+    logging.info('Micro F1: {}'.format(result['micro_f1']))
