@@ -10,9 +10,9 @@ class SoftmaxNN(SentenceRE):
     def __init__(self, sentence_encoder, num_class, rel2id):
         """
         Args:
-            sentence_encoder: encoder for sentences
-            num_class: number of classes
-            id2rel: dictionary of id -> relation name mapping
+            sentence_encoder: encoder for sentences, 初始化的模型
+            num_class: number of classes， 类别数量
+            id2rel: dictionary of id -> relation name mapping， 字典格式，关系到id的映射
         """
         super().__init__()
         self.sentence_encoder = sentence_encoder

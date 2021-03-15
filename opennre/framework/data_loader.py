@@ -29,7 +29,7 @@ class SentenceREDataset(data.Dataset):
             if len(line) > 0:
                 self.data.append(eval(line))
         f.close()
-        logging.info("Loaded sentence RE dataset {} with {} lines and {} relations.".format(path, len(self.data), len(self.rel2id)))
+        logging.info("加载 RE 数据集 {} with {} 行和{} 个关系.".format(path, len(self.data), len(self.rel2id)))
         
     def __len__(self):
         return len(self.data)

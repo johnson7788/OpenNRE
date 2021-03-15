@@ -17,6 +17,10 @@ def infer_wiki80_cnn_softmax():
 
 
 def infer_wiki80_bert_softmax():
+    """
+    有一些错误
+    :return:
+    """
     model = opennre.get_model('wiki80_bert_softmax')
     result = model.infer({
                              'text': 'He was the son of Máel Dúin mac Máele Fithrich, and grandson of the high king Áed Uaridnach (died 612).',

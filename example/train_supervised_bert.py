@@ -13,27 +13,27 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--pretrain_path', default='bert-base-uncased', 
         help='Pre-trained ckpt path / model name (hugginface)')
 parser.add_argument('--ckpt', default='', 
-        help='Checkpoint name')
+        help='Checkpoint 位置')
 parser.add_argument('--pooler', default='entity', choices=['cls', 'entity'], 
-        help='Sentence representation pooler')
+        help='句子表达，使用cls还是实体的表达')
 parser.add_argument('--only_test', action='store_true', 
-        help='Only run test')
+        help='dotest, 只测试，不训练')
 parser.add_argument('--mask_entity', action='store_true', 
-        help='Mask entity mentions')
+        help='是否mask实体提及')
 
 # Data
 parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'],
-        help='Metric for picking up best checkpoint')
+        help='选择best checkpoint时使用哪个 Metric')
 parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred'], 
-        help='Dataset. If not none, the following args can be ignored')
+        help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
 parser.add_argument('--train_file', default='', type=str,
-        help='Training data file')
+        help='训练数据集')
 parser.add_argument('--val_file', default='', type=str,
-        help='Validation data file')
+        help='验证数据集')
 parser.add_argument('--test_file', default='', type=str,
-        help='Test data file')
+        help='测试数据集')
 parser.add_argument('--rel2id_file', default='', type=str,
-        help='Relation to ID file')
+        help='关系到id的映射文件')
 
 # Hyper-parameters
 parser.add_argument('--batch_size', default=64, type=int,
@@ -41,9 +41,9 @@ parser.add_argument('--batch_size', default=64, type=int,
 parser.add_argument('--lr', default=2e-5, type=float,
         help='Learning rate')
 parser.add_argument('--max_length', default=128, type=int,
-        help='Maximum sentence length')
+        help='最大序列长度')
 parser.add_argument('--max_epoch', default=3, type=int,
-        help='Max number of training epochs')
+        help='最大训练的epoch')
 
 args = parser.parse_args()
 
@@ -62,7 +62,7 @@ if args.dataset != 'none':
     args.val_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_val.txt'.format(args.dataset))
     args.test_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_test.txt'.format(args.dataset))
     if not os.path.exists(args.test_file):
-        logging.warn("Test file {} does not exist! Use val file instead".format(args.test_file))
+        logging.warning("Test file {} does not exist! Use val file instead".format(args.test_file))
         args.test_file = args.val_file
     args.rel2id_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_rel2id.json'.format(args.dataset))
     if args.dataset == 'wiki80':
@@ -73,7 +73,7 @@ else:
     if not (os.path.exists(args.train_file) and os.path.exists(args.val_file) and os.path.exists(args.test_file) and os.path.exists(args.rel2id_file)):
         raise Exception('--train_file, --val_file, --test_file and --rel2id_file are not specified or files do not exist. Or specify --dataset')
 
-logging.info('Arguments:')
+logging.info('参数:')
 for arg in vars(args):
     logging.info('    {}: {}'.format(arg, getattr(args, arg)))
 
@@ -95,8 +95,8 @@ elif args.pooler == 'cls':
 else:
     raise NotImplementedError
 
-# Define the model
-model = opennre.model.SoftmaxNN(sentence_encoder, len(rel2id), rel2id)
+#初始化softmax模型
+model = opennre.model.SoftmaxNN(sentence_encoder, num_class=len(rel2id), rel2id=rel2id)
 
 # Define the whole training framework
 framework = opennre.framework.SentenceRE(
