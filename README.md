@@ -1,22 +1,21 @@
 # OpenNRE
 
-**We have a DEMO website ([http://opennre.thunlp.ai/](http://opennre.thunlp.ai/)). Try it out!**
+**在线的Demo网站([http://opennre.thunlp.ai/](http://opennre.thunlp.ai/)). Try it out!**
 
 
-OpenNRE is an open-source and extensible toolkit that provides a unified framework to implement relation extraction models. This package is designed for the following groups:
+OpenNRE是一个开源和可扩展的工具包，它提供了一个统一的框架来实现关系抽取模型。这个软件包是为以下群体设计的：
 
-* **New to relation extraction**: We have hand-by-hand tutorials and detailed documents that can not only enable you to use relation extraction tools, but also help you better understand the research progress in this field.
-* **Developers**: Our easy-to-use interface and high-performance implementation can acclerate your deployment in the real-world applications. Besides, we provide several pretrained models which can be put into production without any training.
-* **Researchers**: With our modular design, various task settings and metric tools, you can easily carry out experiments on your own models with only minor modification. We have also provided several most-used benchmarks for different settings of relation extraction.
-* **Anyone who need to submit an NLP homework to impress their professors**: With state-of-the-art models, our package can definitely help you stand out among your classmates!
+* **关系抽取新手**。我们有手把手的教程和详细的文档，不仅可以让你使用关系抽取工具，还可以帮助你更好的了解这个领域的研究进展。
+* **开发者**。我们简单易用的界面和高性能的实现可以使您在实际应用中的部署更加快捷。此外，我们提供了多个预训练的模型，无需任何训练即可投入生产。
+* **研究人员**。通过我们的模块化设计，各种任务设置和度量工具，您可以轻松地对自己的模型进行实验，只需稍加修改。我们还提供了多个最常用的基准，用于不同设置的关系抽取。
+* **任何需要提交NLP作业来打动教授的人**。我们的软件包拥有最先进的模型，绝对可以帮助你在同学中脱颖而出!
 
-This package is mainly contributed by [Tianyu Gao](https://github.com/gaotianyu1350), [Xu Han](https://github.com/THUCSTHanxu13), [Shulian Cao](https://github.com/ShulinCao), [Lumin Tang](https://github.com/Tsingularity), [Yankai Lin](https://github.com/Mrlyk423), [Zhiyuan Liu](http://nlp.csai.tsinghua.edu.cn/~lzy/)
 
-## What is Relation Extraction
+## 什么是关系抽取
 
-Relation extraction is a natural language processing (NLP) task aiming at extracting relations (e.g., *founder of*) between entities (e.g., **Bill Gates** and **Microsoft**). For example, from the sentence *Bill Gates founded Microsoft*, we can extract the relation triple (**Bill Gates**, *founder of*, **Microsoft**). 
+关系抽取是一种自然语言处理(NLP)任务，旨在提取实体(如**Bill Gates**和**Microsoft**)之间的关系(如*founder of*)。例如，从句子*Bill Gates founded Microsoft*中，我们可以抽取关系三（**Bill Gates**，*founder of*，**Microsoft**）。
 
-Relation extraction is a crucial technique in automatic knowledge graph construction. By using relation extraction, we can accumulatively extract new relation facts and expand the knowledge graph, which, as a way for machines to understand the human world, has many downstream applications like question answering, recommender system and search engine. 
+关系抽取是知识图谱自动构建中的一项重要技术。通过使用关系抽取，我们可以积累抽取新的关系事实，扩展知识图谱，作为机器理解人类世界的一种方式，它有很多下游应用，如问答、推荐系统和搜索引擎。
 
 ## How to Cite
 
@@ -42,7 +41,7 @@ If you want to learn more about neural relation extraction, visit another projec
 
 You can refer to our [document](https://opennre-docs.readthedocs.io/en/latest/) for more details about this project.
 
-## Install 
+## 安装 
 
 ### Install as A Python Package
 
@@ -78,8 +77,8 @@ If you also want to modify the code, run this:
 ```
 python setup.py develop
 ```
-
-Note that we have excluded all data and pretrain files for fast deployment. You can manually download them by running scripts in the ``benchmark`` and ``pretrain`` folders. For example, if you want to download FewRel dataset, you can run
+### 数据集下载
+请注意，为了快速部署，我们已经移除了所有数据和预训练文件。你可以通过运行``benchmark``和``pretrain``文件夹中的脚本来手动下载它们。例如，如果你想下载FewRel数据集，你可以运行 "benchmark "和 "pretrain "文件夹中的脚本。
 
 ```bash
 bash benchmark/download_fewrel.sh
@@ -87,23 +86,22 @@ bash benchmark/download_fewrel.sh
 
 ## Easy Start
 
-Make sure you have installed OpenNRE as instructed above. Then import our package and load pre-trained models.
+确保你已经按照上面的方法表明安装了OpenNRE。然后导入我们的软件包，并加载预训练好的模型。
 
 ```python
 >>> import opennre
 >>> model = opennre.get_model('wiki80_cnn_softmax')
 ```
 
-Note that it may take a few minutes to download checkpoint and data for the first time. Then use `infer` to do sentence-level relation extraction
+注意，首先下载checkpoint和数据可能需要几分钟。然后使用`infer`进行句子级关系抽取
 
 ```python
 >>> model.infer({'text': 'He was the son of Máel Dúin mac Máele Fithrich, and grandson of the high king Áed Uaridnach (died 612).', 'h': {'pos': (18, 46)}, 't': {'pos': (78, 91)}})
 ('father', 0.5108704566955566)
 ```
 
-You will get the relation result and its confidence score.
-
-For now, we have the following available models:
+得到关系结果和它的置信度分数。
+目前，我们有以下几种可用的模型。
 
 * `wiki80_cnn_softmax`: trained on `wiki80` dataset with a CNN encoder.
 * `wiki80_bert_softmax`: trained on `wiki80` dataset with a BERT encoder.
@@ -113,7 +111,7 @@ For now, we have the following available models:
 
 ## Training
 
-You can train your own models on your own data with OpenNRE. In `example` folder we give example training codes for supervised RE models and bag-level RE models. You can either use our provided datasets or your own datasets.
+你可以用OpenNRE在自己的数据上训练自己的模型。在 "example"文件夹中，我们给出了有监督型RE模型和bag-level RE模型的训练代码样本，您可以使用我们提供的数据集或您自己的数据集。
 
 ## Google Group
 
