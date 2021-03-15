@@ -120,6 +120,7 @@ example/
 └── train_supervised_cnn.py     #使用cnn
 
 cd OpenNRE;
+#确保模型文件下载到了pretrain/bert-base-uncased目录下
 python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80
 ```
 

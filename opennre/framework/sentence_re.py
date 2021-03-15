@@ -95,6 +95,7 @@ class SentenceRE(nn.Module):
             self.scheduler = None
         # Cuda
         if torch.cuda.is_available():
+            logging.info("检测到GPU可用，使用GPU")
             self.cuda()
         # Ckpt
         self.ckpt = ckpt
