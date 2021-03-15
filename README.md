@@ -121,7 +121,71 @@ example/
 
 cd OpenNRE;
 #确保模型文件下载到了pretrain/bert-base-uncased目录下
-python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80
+python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler entity
+
+2021-03-15 08:07:32,414 - root - WARNING - Test file ./benchmark/wiki80/wiki80_test.txt does not exist! Use val file instead
+2021-03-15 08:07:32,414 - root - INFO - 参数:
+2021-03-15 08:07:32,414 - root - INFO -     pretrain_path: bert-base-uncased
+2021-03-15 08:07:32,414 - root - INFO -     ckpt: wiki80_bert-base-uncased_entity
+2021-03-15 08:07:32,414 - root - INFO -     pooler: entity
+2021-03-15 08:07:32,414 - root - INFO -     only_test: False
+2021-03-15 08:07:32,414 - root - INFO -     mask_entity: False
+2021-03-15 08:07:32,414 - root - INFO -     metric: acc
+2021-03-15 08:07:32,414 - root - INFO -     dataset: wiki80
+2021-03-15 08:07:32,415 - root - INFO -     train_file: ./benchmark/wiki80/wiki80_train.txt
+2021-03-15 08:07:32,415 - root - INFO -     val_file: ./benchmark/wiki80/wiki80_val.txt
+2021-03-15 08:07:32,415 - root - INFO -     test_file: ./benchmark/wiki80/wiki80_val.txt
+2021-03-15 08:07:32,415 - root - INFO -     rel2id_file: ./benchmark/wiki80/wiki80_rel2id.json
+2021-03-15 08:07:32,415 - root - INFO -     batch_size: 16
+2021-03-15 08:07:32,415 - root - INFO -     lr: 2e-05
+2021-03-15 08:07:32,415 - root - INFO -     max_length: 128
+2021-03-15 08:07:32,415 - root - INFO -     max_epoch: 3
+2021-03-15 08:07:32,415 - root - INFO - 加载 BERT pre-trained checkpoint.
+2021-03-15 08:07:32,630 - filelock - INFO - Lock 139806039272528 acquired on /root/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.637c6035640bacb831febcc2b7f7bee0a96f9b30c2d7e9ef84082d9f252f3170.lock
+Downloading: 100% 433/433 [00:00<00:00, 553kB/s]
+2021-03-15 08:07:32,845 - filelock - INFO - Lock 139806039272528 released on /root/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.637c6035640bacb831febcc2b7f7bee0a96f9b30c2d7e9ef84082d9f252f3170.lock
+2021-03-15 08:07:33,050 - filelock - INFO - Lock 139806178812176 acquired on /root/.cache/huggingface/transformers/a8041bf617d7f94ea26d15e218abd04afc2004805632abc0ed2066aa16d50d04.faf6ea826ae9c5867d12b22257f9877e6b8367890837bd60f7c54a29633f7f2f.lock
+Downloading: 100% 440M/440M [00:06<00:00, 65.1MB/s]
+2021-03-15 08:07:40,025 - filelock - INFO - Lock 139806178812176 released on /root/.cache/huggingface/transformers/a8041bf617d7f94ea26d15e218abd04afc2004805632abc0ed2066aa16d50d04.faf6ea826ae9c5867d12b22257f9877e6b8367890837bd60f7c54a29633f7f2f.lock
+2021-03-15 08:07:42,691 - filelock - INFO - Lock 139806022911376 acquired on /root/.cache/huggingface/transformers/45c3f7a79a80e1cf0a489e5c62b43f173c15db47864303a55d623bb3c96f72a5.d789d64ebfe299b0e416afc4a169632f903f693095b4629a7ea271d5a0cf2c99.lock
+Downloading: 100% 232k/232k [00:00<00:00, 921kB/s]
+2021-03-15 08:07:43,149 - filelock - INFO - Lock 139806022911376 released on /root/.cache/huggingface/transformers/45c3f7a79a80e1cf0a489e5c62b43f173c15db47864303a55d623bb3c96f72a5.d789d64ebfe299b0e416afc4a169632f903f693095b4629a7ea271d5a0cf2c99.lock
+2021-03-15 08:07:46,914 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_train.txt with 50400 行和80 个关系.
+2021-03-15 08:07:47,282 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_val.txt with 5600 行和80 个关系.
+2021-03-15 08:07:47,882 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_val.txt with 5600 行和80 个关系.
+2021-03-15 08:07:47,885 - root - INFO - 检测到GPU可用，使用GPU
+2021-03-15 08:07:50,794 - root - INFO - === Epoch 0 train ===
+100% 3150/3150 [21:27<00:00,  2.45it/s, acc=0.806, loss=0.788]
+2021-03-15 08:29:18,109 - root - INFO - === Epoch 0 val ===
+100% 350/350 [00:51<00:00,  6.76it/s, acc=0.858]
+2021-03-15 08:30:09,911 - root - INFO - Evaluation result: {'acc': 0.8576785714285714, 'micro_p': 0.8576785714285714, 'micro_r': 0.8576785714285714, 'micro_f1': 0.8576785714285715}.
+2021-03-15 08:30:09,911 - root - INFO - Metric micro_f1 current / best: 0.8576785714285715 / 0
+2021-03-15 08:30:09,911 - root - INFO - Best ckpt and saved.
+2021-03-15 08:30:11,301 - root - INFO - === Epoch 1 train ===
+100% 3150/3150 [21:37<00:00,  2.43it/s, acc=0.928, loss=0.245]
+2021-03-15 08:51:48,797 - root - INFO - === Epoch 1 val ===
+100% 350/350 [00:51<00:00,  6.78it/s, acc=0.867]
+2021-03-15 08:52:40,398 - root - INFO - Evaluation result: {'acc': 0.8669642857142857, 'micro_p': 0.8669642857142857, 'micro_r': 0.8669642857142857, 'micro_f1': 0.8669642857142857}.
+2021-03-15 08:52:40,398 - root - INFO - Metric micro_f1 current / best: 0.8669642857142857 / 0.8576785714285715
+2021-03-15 08:52:40,398 - root - INFO - Best ckpt and saved.
+2021-03-15 08:52:41,666 - root - INFO - === Epoch 2 train ===
+100% 3150/3150 [21:18<00:00,  2.46it/s, acc=0.957, loss=0.149]
+2021-03-15 09:14:00,638 - root - INFO - === Epoch 2 val ===
+100% 350/350 [00:51<00:00,  6.77it/s, acc=0.87]
+2021-03-15 09:14:52,355 - root - INFO - Evaluation result: {'acc': 0.8703571428571428, 'micro_p': 0.8703571428571428, 'micro_r': 0.8703571428571428, 'micro_f1': 0.8703571428571429}.
+2021-03-15 09:14:52,355 - root - INFO - Metric micro_f1 current / best: 0.8703571428571429 / 0.8669642857142857
+2021-03-15 09:14:52,355 - root - INFO - Best ckpt and saved.
+2021-03-15 09:14:53,672 - root - INFO - Best micro_f1 on val set: 0.870357
+100% 350/350 [00:51<00:00,  6.76it/s, acc=0.87]
+2021-03-15 09:15:45,670 - root - INFO - Evaluation result: {'acc': 0.8703571428571428, 'micro_p': 0.8703571428571428, 'micro_r': 0.8703571428571428, 'micro_f1': 0.8703571428571429}.
+2021-03-15 09:15:45,670 - root - INFO - Test set results:
+2021-03-15 09:15:45,670 - root - INFO - Accuracy: 0.8703571428571428
+2021-03-15 09:15:45,670 - root - INFO - Micro precision: 0.8703571428571428
+2021-03-15 09:15:45,670 - root - INFO - Micro recall: 0.8703571428571428
+2021-03-15 09:15:45,670 - root - INFO - Micro F1: 0.8703571428571429
+
+#使用cls的方式
+python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler cls
 ```
 
 ## Google Group
