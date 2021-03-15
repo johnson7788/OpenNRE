@@ -108,7 +108,9 @@ framework = opennre.framework.SentenceRE(
     batch_size=args.batch_size,
     max_epoch=args.max_epoch,
     lr=args.lr,
-    opt='adamw'
+    opt='adamw',
+    parallel=False,   #是否GPU并发
+    num_workers=0     # Dataloader的进程数，使用并发时使用
 )
 
 if __name__ == '__main__':

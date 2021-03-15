@@ -113,6 +113,16 @@ bash benchmark/download_fewrel.sh
 
 你可以用OpenNRE在自己的数据上训练自己的模型。在 "example"文件夹中，我们给出了有监督型RE模型和bag-level RE模型的训练代码样本，您可以使用我们提供的数据集或您自己的数据集。
 
+```buildoutcfg
+example/
+├── train_bag_pcnn_att.py       #使用pcnn，根据论文来看，bert效果较好
+├── train_supervised_bert.py    #训练和测试bert模型,可以加选项，使用cls或entity实体的向量表示2种情况
+└── train_supervised_cnn.py     #使用cnn
+
+cd OpenNRE;
+python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80
+```
+
 ## Google Group
 
 If you want to receive our update news or take part in discussions, please join our [Google Group](https://groups.google.com/forum/#!forum/opennre/join)
