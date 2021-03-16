@@ -36,19 +36,33 @@ class SentenceREDataset(data.Dataset):
         return len(self.data)
     
     def __getitem__(self, index):
+        """
+        获取一条数据，数据经过tokenizer后的, 会连续获取一个batch_size的数据
+        :param index: 47393
+        :return:  包含5个元素的列表， 关系的id, 句子id, att_mask, 实体1的起始位置tensor, 实体2的结束位置
+        """
         item = self.data[index]
         seq = list(self.tokenizer(item, **self.kwargs))
+        # [self.rel2id[item['relation']]] 代表关系的id
         res = [self.rel2id[item['relation']]] + seq
         return res # label, seq1, seq2, ...
     
     def collate_fn(data):
+        """
+        对一个batch的数据进行处理，里面是一个列表，是batch_size大小，是上面__getitem__返回的每一条数据拼接成的一个batch_size大小的列表,这里每个原素是包含5个元素
+        经过list(zip(*data))处理后每个元素的第一维度是batch_size
+        :return:
+        """
         data = list(zip(*data))
         labels = data[0]
+        # seqs是4种特征，句子id, att_mask, 实体1的起始位置tensor, 实体2的结束位置
         seqs = data[1:]
         batch_labels = torch.tensor(labels).long() # (B)
         batch_seqs = []
         for seq in seqs:
+            # 把每个特征的batch_size 拼接起来 [1,128] --> [batch_size, max_seq_length] , 然后放到一个列表中
             batch_seqs.append(torch.cat(seq, 0)) # (B, L)
+        #返回包含一个列表的含4个元素，每个元素都是tensor
         return [batch_labels] + batch_seqs
     
     def eval(self, pred_result, use_name=False):

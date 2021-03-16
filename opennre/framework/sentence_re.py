@@ -123,9 +123,11 @@ class SentenceRE(nn.Module):
                             data[i] = data[i].cuda()
                         except:
                             pass
+                #  一个batch_size的label, 16
                 label = data[0]
+                # args是一个包含4个元素的列表， [token ids, atten_mask, entity1_start_id, entity2_end_id]
                 args = data[1:]
-                # logits shape [batch_size, num_classes]
+                # args是一个包含4个元素的列表作为特征放入模型， logits shape [batch_size, num_classes]
                 if self.parallel_model:
                     logits = self.parallel_model(*args)
                 else:
@@ -158,11 +160,16 @@ class SentenceRE(nn.Module):
         logging.info("Best %s on val set: %f" % (metric, best_metric))
 
     def eval_model(self, eval_loader):
+        """
+        评估模型
+        :param eval_loader: 评估数据集
+        :return:
+        """
         self.eval()
         avg_acc = AverageMeter()
         pred_result = []
         with torch.no_grad():
-            t = tqdm(eval_loader)
+            t = tqdm(eval_loader, desc='评估: ')
             for iter, data in enumerate(t):
                 if torch.cuda.is_available():
                     for i in range(len(data)):
