@@ -184,8 +184,38 @@ Downloading: 100% 232k/232k [00:00<00:00, 921kB/s]
 2021-03-15 09:15:45,670 - root - INFO - Micro recall: 0.8703571428571428
 2021-03-15 09:15:45,670 - root - INFO - Micro F1: 0.8703571428571429
 
-#使用cls的方式
+#使用cls的方式, 效果比实体的方式差
 python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler cls
+
+2021-03-16 01:11:58,524 - root - INFO - === Epoch 0 train ===
+100% 3150/3150 [19:11<00:00,  2.73it/s, acc=0.668, loss=1.44]
+2021-03-16 01:31:10,290 - root - INFO - === Epoch 0 val ===
+100% 350/350 [00:45<00:00,  7.74it/s, acc=0.798]
+2021-03-16 01:31:55,504 - root - INFO - Evaluation result: {'acc': 0.7983928571428571, 'micro_p': 0.7983928571428571, 'micro_r': 0.7983928571428571, 'micro_f1': 0.7983928571428571}.
+2021-03-16 01:31:55,504 - root - INFO - Metric micro_f1 current / best: 0.7983928571428571 / 0
+2021-03-16 01:31:55,504 - root - INFO - Best ckpt and saved.
+2021-03-16 01:31:56,855 - root - INFO - === Epoch 1 train ===
+100% 3150/3150 [19:20<00:00,  2.72it/s, acc=0.876, loss=0.446]
+2021-03-16 01:51:17,022 - root - INFO - === Epoch 1 val ===
+100% 350/350 [00:45<00:00,  7.73it/s, acc=0.838]
+2021-03-16 01:52:02,291 - root - INFO - Evaluation result: {'acc': 0.8382142857142857, 'micro_p': 0.8382142857142857, 'micro_r': 0.8382142857142857, 'micro_f1': 0.8382142857142857}.
+2021-03-16 01:52:02,291 - root - INFO - Metric micro_f1 current / best: 0.8382142857142857 / 0.7983928571428571
+2021-03-16 01:52:02,292 - root - INFO - Best ckpt and saved.
+2021-03-16 01:52:03,477 - root - INFO - === Epoch 2 train ===
+100% 3150/3150 [19:19<00:00,  2.72it/s, acc=0.923, loss=0.278]
+2021-03-16 02:11:22,763 - root - INFO - === Epoch 2 val ===
+100% 350/350 [00:45<00:00,  7.75it/s, acc=0.85]
+2021-03-16 02:12:07,930 - root - INFO - Evaluation result: {'acc': 0.8498214285714286, 'micro_p': 0.8498214285714286, 'micro_r': 0.8498214285714286, 'micro_f1': 0.8498214285714286}.
+2021-03-16 02:12:07,930 - root - INFO - Metric micro_f1 current / best: 0.8498214285714286 / 0.8382142857142857
+2021-03-16 02:12:07,930 - root - INFO - Best ckpt and saved.
+2021-03-16 02:12:09,198 - root - INFO - Best micro_f1 on val set: 0.849821
+100% 350/350 [00:45<00:00,  7.72it/s, acc=0.85]
+2021-03-16 02:12:54,762 - root - INFO - Evaluation result: {'acc': 0.8498214285714286, 'micro_p': 0.8498214285714286, 'micro_r': 0.8498214285714286, 'micro_f1': 0.8498214285714286}.
+2021-03-16 02:12:54,762 - root - INFO - Test set results:
+2021-03-16 02:12:54,763 - root - INFO - Accuracy: 0.8498214285714286
+2021-03-16 02:12:54,763 - root - INFO - Micro precision: 0.8498214285714286
+2021-03-16 02:12:54,763 - root - INFO - Micro recall: 0.8498214285714286
+2021-03-16 02:12:54,763 - root - INFO - Micro F1: 0.8498214285714286
 ```
 
 ## Google Group

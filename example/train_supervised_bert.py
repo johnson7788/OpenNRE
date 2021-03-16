@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import json
 import opennre
-from opennre import encoder, model, framework
+from opennre import encoder, model
 import sys
 import os
 import argparse
@@ -99,7 +99,7 @@ else:
 model = opennre.model.SoftmaxNN(sentence_encoder, num_class=len(rel2id), rel2id=rel2id)
 
 # Define the whole training framework
-framework = opennre.framework.SentenceRE(
+myframe = opennre.framework.SentenceRE(
     train_path=args.train_file,
     val_path=args.val_file,
     test_path=args.test_file,
@@ -116,13 +116,13 @@ framework = opennre.framework.SentenceRE(
 if __name__ == '__main__':
     # Train the model
     if not args.only_test:
-        framework.train_model('micro_f1')
+        myframe.train_model('micro_f1')
 
     # Test
-    framework.load_state_dict(torch.load(ckpt)['state_dict'])
-    result = framework.eval_model(framework.test_loader)
+    myframe.load_state_dict(torch.load(ckpt)['state_dict'])
+    result = myframe.eval_model(myframe.test_loader)
 
-    # Print the result
+    #打印结果
     logging.info('Test set results:')
     logging.info('Accuracy: {}'.format(result['acc']))
     logging.info('Micro precision: {}'.format(result['micro_p']))
