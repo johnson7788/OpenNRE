@@ -54,11 +54,10 @@ class SentenceREDataset(data.Dataset):
     def eval(self, pred_result, use_name=False):
         """
         Args:
-            pred_result: a list of predicted label (id)
-                Make sure that the `shuffle` param is set to `False` when getting the loader.
-            use_name: if True, `pred_result` contains predicted relation names instead of ids
+            pred_result: 预测标签(id)的列表，在生成dataloader时确保`shuffle`参数设置为`False`。
+            use_name: 如果True，`pred_result`包含预测的关系名，而不是id。
         Return:
-            {'acc': xx}
+            {'acc': acc, 'micro_p': micro_p, 'micro_r': micro_r, 'micro_f1': micro_f1}
         """
         correct = 0
         total = len(self.data)

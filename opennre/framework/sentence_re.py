@@ -105,7 +105,7 @@ class SentenceRE(nn.Module):
     def train_model(self, metric='acc'):
         """
         训练模型
-        :param metric: 使用哪个指标作为checkpoint的最佳指标,
+        :param metric: 使用哪个指标作为checkpoint的最佳指标,支持acc， micro_p， micro_r， micro_f1
         :return:
         """
         best_metric = 0
