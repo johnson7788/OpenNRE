@@ -99,9 +99,12 @@ class BERTEncoder(nn.Module):
 class BERTEntityEncoder(nn.Module):
     def __init__(self, max_length, pretrain_path, blank_padding=True, mask_entity=False):
         """
+        加载huggface的预训练模型，初始化tokenizer
         Args:
-            max_length: max length of sentence
-            pretrain_path: path of pretrain model
+            max_length: 最大序列长度
+            pretrain_path: 预训练模型的路径
+            blank_padding: bool
+            mask_entity: bool
         """
         super().__init__()
         self.max_length = max_length

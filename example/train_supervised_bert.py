@@ -7,8 +7,7 @@ from opennre import encoder, model
 import sys
 import os
 import argparse
-from opennre.framework.utils import get_logger
-
+import logging
 
 def doargs():
     parser = argparse.ArgumentParser()
@@ -137,7 +136,15 @@ def dotest(ckpt):
 
 if __name__ == '__main__':
     args = doargs()
-    logging = get_logger(name='train', logfile='train.log')
+    logfile = "train.log"
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - [%(levelname)s] - %(module)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(logfile, mode='w', encoding='utf-8'),
+        ]
+    )
     myframe, ckpt = load_dataset_and_framework()
     if args.do_train:
         dotrain()

@@ -123,6 +123,9 @@ cd OpenNRE;
 #确保模型文件下载到了pretrain/bert-base-uncased目录下
 python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler entity --do_train --do_test
 
+#如果没有下载， 那么指定默认名称
+python example/train_supervised_bert.py --pretrain_path bert-base-uncased --dataset wiki80 --pooler entity --do_train --do_test
+
 2021-03-15 08:07:32,414 - root - WARNING - Test file ./benchmark/wiki80/wiki80_test.txt does not exist! Use val file instead
 2021-03-15 08:07:32,414 - root - INFO - 参数:
 2021-03-15 08:07:32,414 - root - INFO -     pretrain_path: bert-base-uncased

@@ -4,7 +4,7 @@ from .base_model import SentenceRE
 
 class SoftmaxNN(SentenceRE):
     """
-    Softmax classifier for sentence-level relation extraction.
+    Softmax分类器用于句子级关系抽取。
     """
 
     def __init__(self, sentence_encoder, num_class, rel2id):
