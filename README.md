@@ -121,7 +121,7 @@ example/
 
 cd OpenNRE;
 #确保模型文件下载到了pretrain/bert-base-uncased目录下
-python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler entity
+python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler entity --do_train --do_test
 
 2021-03-15 08:07:32,414 - root - WARNING - Test file ./benchmark/wiki80/wiki80_test.txt does not exist! Use val file instead
 2021-03-15 08:07:32,414 - root - INFO - 参数:
@@ -185,7 +185,7 @@ Downloading: 100% 232k/232k [00:00<00:00, 921kB/s]
 2021-03-15 09:15:45,670 - root - INFO - Micro F1: 0.8703571428571429
 
 #使用cls的方式, 效果比实体的方式差
-python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler cls
+python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler cls --do_train --do_test
 
 2021-03-16 01:11:58,524 - root - INFO - === Epoch 0 train ===
 100% 3150/3150 [19:11<00:00,  2.73it/s, acc=0.668, loss=1.44]
