@@ -11,9 +11,10 @@ class SentenceREDataset(data.Dataset):
     def __init__(self, path, rel2id, tokenizer, kwargs):
         """
         Args:
-            path: path of the input file
-            rel2id: dictionary of relation->id mapping
-            tokenizer: function of tokenizing
+            path: 数据原始文件
+            rel2id: dictionary of relation->id mapping, 关系到id的映射字典
+            tokenizer: function of tokenizing，初始化的tokenizer
+            kwargs: tokenizer的其它参数
         """
         super().__init__()
         self.path = path
@@ -38,7 +39,7 @@ class SentenceREDataset(data.Dataset):
         item = self.data[index]
         seq = list(self.tokenizer(item, **self.kwargs))
         res = [self.rel2id[item['relation']]] + seq
-        return [self.rel2id[item['relation']]] + seq # label, seq1, seq2, ...
+        return res # label, seq1, seq2, ...
     
     def collate_fn(data):
         data = list(zip(*data))
@@ -99,11 +100,23 @@ class SentenceREDataset(data.Dataset):
         except:
             micro_f1 = 0
         result = {'acc': acc, 'micro_p': micro_p, 'micro_r': micro_r, 'micro_f1': micro_f1}
-        logging.info('Evaluation result: {}.'.format(result))
+        logging.info('评估结果 : {}.'.format(result))
         return result
     
 def SentenceRELoader(path, rel2id, tokenizer, batch_size, 
         shuffle, num_workers=8, collate_fn=SentenceREDataset.collate_fn, **kwargs):
+    """
+    加载数据，返回Dataloader
+    :param path:  数据集文件 eg: './benchmark/wiki80/wiki80_train.txt'
+    :param rel2id: 关系到id的映射字典
+    :param tokenizer: 初始化的tokenizer
+    :param batch_size: eg： 16
+    :param shuffle: bool
+    :param num_workers: 使用的进程数
+    :param collate_fn: 数据处理函数
+    :param kwargs: tokenizer的其它参数
+    :return:
+    """
     dataset = SentenceREDataset(path = path, rel2id = rel2id, tokenizer = tokenizer, kwargs=kwargs)
     data_loader = data.DataLoader(dataset=dataset,
             batch_size=batch_size,

@@ -6,13 +6,15 @@ from .data_loader import SentenceRELoader
 from .utils import AverageMeter
 
 class SentenceRE(nn.Module):
-
+    """
+    模型训练函数
+    """
     def __init__(self, 
-                 model,
-                 train_path, 
+                 model,   #初始化后的模型
+                 train_path, #训练文件路径
                  val_path, 
                  test_path,
-                 ckpt, 
+                 ckpt,    #要保存的模型的checkpoint路径
                  batch_size=32, 
                  max_epoch=100, 
                  lr=0.1, 
@@ -85,7 +87,7 @@ class SentenceRE(nn.Module):
             ]
             self.optimizer = AdamW(grouped_params, correct_bias=False)
         else:
-            raise Exception("Invalid optimizer. Must be 'sgd' or 'adam' or 'adamw'.")
+            raise Exception("无效优化器. Must be 'sgd' or 'adam' or 'adamw'.")
         # Warmup
         if warmup_step > 0:
             from transformers import get_linear_schedule_with_warmup
@@ -101,6 +103,11 @@ class SentenceRE(nn.Module):
         self.ckpt = ckpt
 
     def train_model(self, metric='acc'):
+        """
+        训练模型
+        :param metric: 使用哪个指标作为checkpoint的最佳指标,
+        :return:
+        """
         best_metric = 0
         global_step = 0
         for epoch in range(self.max_epoch):
