@@ -1,6 +1,6 @@
-torch==1.7.1
+torch
 transformers==4.1.1
-pytest==5.3.2
-scikit-learn==0.22.1
-scipy==1.4.1
-nltk==3.4.5
+pytest
+scikit-learn
+scipy
+nltk
