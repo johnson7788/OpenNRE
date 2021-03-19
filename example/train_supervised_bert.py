@@ -25,7 +25,7 @@ def doargs():
     # Data
     parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'],
                         help='选择best checkpoint时使用哪个 Metric')
-    parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred'],
+    parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
                         help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
     parser.add_argument('--train_file', default='', type=str,
                         help='训练数据集')

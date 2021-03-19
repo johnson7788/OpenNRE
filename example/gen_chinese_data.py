@@ -43,7 +43,7 @@ def gen_rel2id(train_dir, destination='/Users/admin/git/OpenNRE/benchmark/liter/
     with open(destination, 'w', encoding='utf-8') as f:
         json.dump(rel2id, f)
 
-def gen_data(source_dir, des_dir):
+def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
     """
     根据原始目录生成目标训练或测试等文件
     :param source_dir: eg: /Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training
@@ -171,18 +171,36 @@ def gen_data(source_dir, des_dir):
             if text[h2_pos_start:h2_pos_stop] != h2_entity_value:
                 h2_pos_start, h2_pos_stop = get_true_pos(text=text,value=h2_entity_value, pos1=h2_pos_start, pos2=h2_pos_stop)
 
-            #开始整理成一条数据
+            if truncate != -1:
+                if abs(h1_pos_start - h2_pos_stop) > truncate:
+                    print(f'2个实体间的距离很大,超过了{truncate}长度')
+                else:
+                    #开始截断数据, 只保留最大长度
+                    add_length = truncate - abs(h1_pos_start - h2_pos_stop)
+                    added =  int(add_length/2)
+                    if h1_pos_start < h2_pos_stop:
+                        truncate_start = h1_pos_start - added
+                        truncate_end = h2_pos_stop + added
+                    else:
+                        truncate_start = h2_pos_stop - added
+                        truncate_end = h1_pos_start + added
+                    if truncate_start <0:
+                        truncate_start = 0
+                    truncate_text = text[truncate_start:truncate_end]
+            else:
+                truncate_text = text
+            # 开始整理成一条数据
             one_data = {
-                'text':text,
-                'h':{
-                    'name':h1_entity_value,
+                'text': truncate_text,
+                'h': {
+                    'name': h1_entity_value,
                     'id': h1_entityid,
-                    'pos':[h1_pos_start, h1_pos_stop]
+                    'pos': [h1_pos_start, h1_pos_stop]
                 },
-                't':{
-                    'name':h2_entity_value,
-                    'id':h2_entityid,
-                    'pos':[h2_pos_start, h2_pos_stop]
+                't': {
+                    'name': h2_entity_value,
+                    'id': h2_entityid,
+                    'pos': [h2_pos_start, h2_pos_stop]
                 },
                 'relation': relation
             }
@@ -198,16 +216,21 @@ def gen_data(source_dir, des_dir):
     train_data = data[:train_num]
     dev_data = data[train_num:train_num+dev_num]
     test_data = data[train_num+dev_num:]
+    if mini_data:
+        #选择前500条样本测试
+        train_data = train_data[:500]
+        dev_data = dev_data[:100]
+        test_data = test_data[:100]
     with open(train_file, 'w', encoding='utf-8') as f:
         for d in train_data:
-            f.write(json.dumps(d))
+            f.write(json.dumps(d) + '\n')
     with open(dev_file, 'w', encoding='utf-8') as f:
         for d in dev_data:
-            f.write(json.dumps(d))
+            f.write(json.dumps(d)+ '\n')
     with open(test_file, 'w', encoding='utf-8') as f:
         for d in test_data:
-            f.write(json.dumps(d))
+            f.write(json.dumps(d)+ '\n')
 
 if __name__ == '__main__':
     # gen_rel2id(train_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training')
-    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter')
+    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter', mini_data=False, truncate=128)
