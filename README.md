@@ -79,7 +79,6 @@ python setup.py develop
 ```
 ### 数据集下载
 请注意，为了快速部署，我们已经移除了所有数据和预训练文件。你可以通过运行``benchmark``和``pretrain``文件夹中的脚本来手动下载它们。例如，如果你想下载FewRel数据集，你可以运行 "benchmark "和 "pretrain "文件夹中的脚本。
-
 ```bash
 bash benchmark/download_fewrel.sh
 ```
@@ -118,6 +117,9 @@ example/
 ├── train_bag_pcnn_att.py       #使用pcnn，根据论文来看，bert效果较好
 ├── train_supervised_bert.py    #训练和测试bert模型,可以加选项，使用cls或entity实体的向量表示2种情况
 └── train_supervised_cnn.py     #使用cnn
+
+支持数据集参数
+'semeval', 'wiki80', 'tacred'
 
 cd OpenNRE;
 #确保模型文件下载到了pretrain/bert-base-uncased目录下
