@@ -32,7 +32,13 @@ class WordTokenizer(object):
     """Runs WordPiece tokenziation."""
 
     def __init__(self, vocab = None, unk_token="[UNK]"):
+        """
+        :param vocab: word2id的dict文件
+        :param unk_token:
+        """
+        # 单词到id映射
         self.vocab = load_vocab(vocab)
+        # id到单词映射
         self.inv_vocab = {v: k for k, v in self.vocab.items()}
         self.unk_token = unk_token
 

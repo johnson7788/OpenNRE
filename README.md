@@ -224,6 +224,9 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 ```
 
 # 使用CNN训练wiki80, 训练100个epoch，max_seq_length 128
+```buildoutcfg
+python train_supervised_cnn.py --do_train --do_test --dataset wiki80 --english
+```
 训练100个epoch时的准确率达91%，但是测试集只有76%，过拟合较严重
 [0 99%|█████████████████████████_ÿ███████████████████▋| 1565/1575 
 [0 100%|██████████████████████████████████████████████| 1575/1575 
@@ -252,6 +255,13 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 2021-03-19 18:01:40,730 - root - INFO - Micro precision: 0.7288261515601783
 2021-03-19 18:01:40,730 - root - INFO - Micro recall: 0.7288261515601783
 2021-03-19 18:01:40,730 - root - INFO - Micro F1: 0.7288261515601783
+```
+
+使用Chinese-Literature-NER-RE-Dataset 中文的CNN测试
+```buildoutcfg
+python example/train_supervised_cnn.py --do_train --do_test --dataset liter --word_embedding_size 300
+
+
 ```
 
 ## Google Group

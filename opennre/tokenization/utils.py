@@ -143,7 +143,11 @@ def strip_accents(text):
     return "".join(output)
 
 def load_vocab(vocab_file):
-    """Loads a vocabulary file into a dictionary."""
+    """
+    将一个单词文件加载到一个字典中。
+    :param vocab_file: 单词到id的映射文件
+    :return:
+    """
     if vocab_file ==  None:
         raise ValueError("Unsupported string type: %s" % (type(text)))
     if isinstance(vocab_file, str) or isinstance(vocab_file, bytes):

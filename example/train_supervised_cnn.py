@@ -14,6 +14,7 @@ def doargs():
     parser.add_argument('--ckpt', default='', help='Checkpoint 名字')
     parser.add_argument('--do_train', action='store_true', help='训练模型')
     parser.add_argument('--do_test', action='store_true', help='测试模型')
+    parser.add_argument('--english', action='store_true', help='使用英语的word2vec的，如果数据集是英文的，那么用这个，例如用wiki80时选择这个')
     # Data
     parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'], help='选择best checkpoint时使用哪个 Metric')
     parser.add_argument('--dataset', default='wiki80', choices=['none', 'semeval', 'wiki80', 'tacred'],
@@ -22,6 +23,7 @@ def doargs():
     parser.add_argument('--val_file', default='', type=str,help='验证数据集')
     parser.add_argument('--test_file', default='', type=str, help='测试数据集')
     parser.add_argument('--rel2id_file', default='', type=str,help='关系到id的映射文件')
+    parser.add_argument('--word_embedding_size', default=50, type=int, help='单词的embedding的尺寸')
 
     # Hyper-parameters
     parser.add_argument('--batch_size', default=32, type=int,
@@ -66,16 +68,30 @@ def load_dataset_and_framework():
 
     rel2id = json.load(open(args.rel2id_file))
 
-    # Download glove
-    opennre.download('glove', root_path=root_path)
-    word2id = json.load(open(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_word2id.json')))
-    word2vec = np.load(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_mat.npy'))
+    if args.english:
+        # Download glove
+        opennre.download('glove', root_path=root_path)
+        #单词到id映射，单词个数400002
+        word2id = json.load(open(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_word2id.json')))
+        # 维度(400000, 50)
+        word2vec = np.load(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_mat.npy'))
+    else:
+        embedding_file = "/opt/sentiment_pytorch/embedding/model.npy"
+        words_file = "/opt/sentiment_pytorch/embedding/word2index.json"
+        if os.path.exists(embedding_file):
+            # 690929个单词(690929, 300)
+            word2vec = np.load(embedding_file)
+            #690929个单词id映射
+            word2id = json.load(open(words_file))
+        else:
+            raise Exception("中文embedding文件不存在，请自己先行训练")
+
 
     # Define the sentence encoder
     sentence_encoder = opennre.encoder.CNNEncoder(
         token2id=word2id,
         max_length=args.max_length,
-        word_size=50,
+        word_size=args.word_embedding_size,
         position_size=5,
         hidden_size=230,
         blank_padding=True,
@@ -90,7 +106,7 @@ def load_dataset_and_framework():
     model = opennre.model.SoftmaxNN(sentence_encoder, len(rel2id), rel2id)
 
     # Define the whole training framework
-    framework = opennre.framework.SentenceRE(
+    myframe = opennre.framework.SentenceRE(
         train_path=args.train_file,
         val_path=args.val_file,
         test_path=args.test_file,

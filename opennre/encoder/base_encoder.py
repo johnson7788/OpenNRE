@@ -21,7 +21,7 @@ class BaseEncoder(nn.Module):
             token2id: dictionary of token->idx mapping
             max_length: max length of sentence, used for postion embedding
             hidden_size: hidden size
-            word_size: size of word embedding
+            word_size: size of word embedding, 单词的embedding改成多少
             position_size: size of position embedding
             blank_padding: padding for CNN
             word2vec: pretrained word2vec numpy
@@ -55,7 +55,7 @@ class BaseEncoder(nn.Module):
         # Word embedding
         self.word_embedding = nn.Embedding(self.num_token, self.word_size)
         if word2vec is not None:
-            logging.info("Initializing word embedding with word2vec.")
+            logging.info("初始化词嵌入，根据提供的word2vec向量")
             word2vec = torch.from_numpy(word2vec)
             if self.num_token == len(word2vec) + 2:            
                 unk = torch.randn(1, self.word_size) / math.sqrt(self.word_size)
