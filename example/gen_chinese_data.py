@@ -48,6 +48,7 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
     根据原始目录生成目标训练或测试等文件
     :param source_dir: eg: /Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training
     :param des_dir:  eg: /Users/admin/git/OpenNRE/benchmark/liter
+    :param truncate: -1表示不截断，否则截断，保留截断的最大长度，如果2个实体之间的距离超过了最大长度truncate,那么保留全部
     :return:
     """
     #保存处理好的数据
@@ -59,6 +60,8 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
     #转出成不带文件后缀的key和文件名为value的字典
     ann_file_dict = {f.split('.')[0]:f for f in ann_files}
     text_file_dict = {f.split('.')[0]: f for f in text_files}
+    #如果做了截断，统计下2个实体之间的距离超过了最大的长度，那么没法截断
+    longer_num = 0
     for k, v in ann_file_dict.items():
         if text_file_dict.get(k) is None:
             print(f"文件{v} 不存在对应的txt文件，错误")
@@ -119,7 +122,7 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
             ent_dict[entity_id] = entity[1:]
 
         #开始分析所有关系
-        for rel in rels:
+        for idx, rel in enumerate(rels):
             relation = rel[1]
             arg1, h1_entityid = rel[2].split(':')
             assert arg1 == 'Arg1', f"{rel}分隔的首个字符不是Arg1"
@@ -173,20 +176,29 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
 
             if truncate != -1:
                 if abs(h1_pos_start - h2_pos_stop) > truncate:
-                    print(f'2个实体间的距离很大,超过了{truncate}长度')
+                    print(f'2个实体间的距离很大,超过了{truncate}长度, 不作处理')
+                    longer_num +=1
                 else:
                     #开始截断数据, 只保留最大长度
                     add_length = truncate - abs(h1_pos_start - h2_pos_stop)
-                    added =  int(add_length/2)
+                    added = int(add_length/2)
                     if h1_pos_start < h2_pos_stop:
                         truncate_start = h1_pos_start - added
                         truncate_end = h2_pos_stop + added
                     else:
-                        truncate_start = h2_pos_stop - added
-                        truncate_end = h1_pos_start + added
+                        # 说明h2实体在h1实体的前面，那么
+                        truncate_start = h2_pos_start - added
+                        truncate_end = h1_pos_stop + added
                     if truncate_start <0:
                         truncate_start = 0
                     truncate_text = text[truncate_start:truncate_end]
+                    #截断之后需要更新下实体的位置
+                    h1_pos_start = h1_pos_start - truncate_start
+                    h1_pos_stop = h1_pos_stop - truncate_start
+                    h2_pos_start = h2_pos_start - truncate_start
+                    h2_pos_stop = h2_pos_stop - truncate_start
+                    assert truncate_text[h1_pos_start:h1_pos_stop] == h1_entity_value, f"文件{v}: 索引为 {idx}: 截断后实体的位置和值不匹配"
+                    assert truncate_text[h2_pos_start:h2_pos_stop] == h2_entity_value, f"文件{v}: 索引为 {idx}: 截断后实体的位置和值不匹配"
             else:
                 truncate_text = text
             # 开始整理成一条数据
@@ -209,7 +221,7 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
     train_file = os.path.join(des_dir, 'liter_train.txt')
     dev_file = os.path.join(des_dir, 'liter_test.txt')
     test_file = os.path.join(des_dir, 'liter_val.txt')
-    print(f"一共处理了{len(ann_files)}个文件，生成{len(data)}条数据")
+    print(f"一共处理了{len(ann_files)}个文件，生成{len(data)}条数据,其中2个实体之间超过最大长度的数据有{longer_num}条")
     random.shuffle(data)
     train_num = int(len(data) * 0.8)
     dev_num = int(len(data) * 0.1)
@@ -234,4 +246,4 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
 
 if __name__ == '__main__':
     # gen_rel2id(train_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training')
-    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter', mini_data=False, truncate=128)
+    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter', mini_data=True, truncate=128)

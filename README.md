@@ -271,6 +271,8 @@ python example/train_supervised_cnn.py --do_train --do_test --dataset liter --wo
 2021-03-24 14:30:44,018 - root - INFO - Micro F1: 0.5817236255572066
 ```
 
+#使用PCNN测试 Chinese-Literature-NER-RE-Dataset
+
 ## Google Group
 
 If you want to receive our update news or take part in discussions, please join our [Google Group](https://groups.google.com/forum/#!forum/opennre/join)
