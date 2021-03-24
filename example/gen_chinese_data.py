@@ -230,7 +230,8 @@ def gen_data(source_dir, des_dir, mini_data = False, truncate=-1):
     with open(test_file, 'w', encoding='utf-8') as f:
         for d in test_data:
             f.write(json.dumps(d)+ '\n')
+    print(f"训练集数量{len(train_data)}, 测试集数量{len(test_data)},开发集数量{len(dev_data)}")
 
 if __name__ == '__main__':
     # gen_rel2id(train_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training')
-    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter', mini_data=False, truncate=128)
+    gen_data(source_dir='/Users/admin/git/Chinese-Literature-NER-RE-Dataset/relation_extraction/Training', des_dir='/Users/admin/git/OpenNRE/benchmark/liter', mini_data=False, truncate=196)

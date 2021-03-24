@@ -223,6 +223,28 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 2021-03-16 02:12:54,763 - root - INFO - Micro F1: 0.8498214285714286
 ```
 
+
+# 使用Chinese-Literature-NER-RE-Dataset
+```buildoutcfg
+长度128，3个epoch
+2021-03-19 17:44:51,771 - root - INFO - 评估结果 : {'acc': 0.736998514115899, 'micro_p': 0.736998514115899, 'micro_r': 0.736998514115899, 'micro_f1': 0.736998514115899}.
+2021-03-19 17:44:51,771 - root - INFO - Test set results:
+2021-03-19 17:44:51,771 - root - INFO - Accuracy: 0.736998514115899
+2021-03-19 17:44:51,771 - root - INFO - Micro precision: 0.736998514115899
+2021-03-19 17:44:51,771 - root - INFO - Micro recall: 0.736998514115899
+2021-03-19 17:44:51,771 - root - INFO - Micro F1: 0.736998514115899
+```
+
+```buildoutcfg
+长度198，3个epoch
+2021-03-19 18:01:40,730 - root - INFO - 评估结果 : {'acc': 0.7288261515601783, 'micro_p': 0.7288261515601783, 'micro_r': 0.7288261515601783, 'micro_f1': 0.7288261515601783}.
+2021-03-19 18:01:40,730 - root - INFO - Test set results:
+2021-03-19 18:01:40,730 - root - INFO - Accuracy: 0.7288261515601783
+2021-03-19 18:01:40,730 - root - INFO - Micro precision: 0.7288261515601783
+2021-03-19 18:01:40,730 - root - INFO - Micro recall: 0.7288261515601783
+2021-03-19 18:01:40,730 - root - INFO - Micro F1: 0.7288261515601783
+```
+
 ## Google Group
 
 If you want to receive our update news or take part in discussions, please join our [Google Group](https://groups.google.com/forum/#!forum/opennre/join)
