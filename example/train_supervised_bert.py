@@ -27,14 +27,10 @@ def doargs():
                         help='选择best checkpoint时使用哪个 Metric')
     parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
                         help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
-    parser.add_argument('--train_file', default='', type=str,
-                        help='训练数据集')
-    parser.add_argument('--val_file', default='', type=str,
-                        help='验证数据集')
-    parser.add_argument('--test_file', default='', type=str,
-                        help='测试数据集')
-    parser.add_argument('--rel2id_file', default='', type=str,
-                        help='关系到id的映射文件')
+    parser.add_argument('--train_file', default='', type=str, help='训练数据集')
+    parser.add_argument('--val_file', default='', type=str, help='验证数据集')
+    parser.add_argument('--test_file', default='', type=str, help='测试数据集')
+    parser.add_argument('--rel2id_file', default='', type=str, help='关系到id的映射文件')
 
     # Hyper-parameters
     parser.add_argument('--batch_size', default=16, type=int,

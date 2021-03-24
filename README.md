@@ -223,6 +223,8 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 2021-03-16 02:12:54,763 - root - INFO - Micro F1: 0.8498214285714286
 ```
 
+# 使用CNN训练wiki80, 训练100个epoch，max_seq_length 128
+
 
 # 使用Chinese-Literature-NER-RE-Dataset
 ```buildoutcfg
