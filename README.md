@@ -257,10 +257,18 @@ python train_supervised_cnn.py --do_train --do_test --dataset wiki80 --english
 2021-03-19 18:01:40,730 - root - INFO - Micro F1: 0.7288261515601783
 ```
 
-使用Chinese-Literature-NER-RE-Dataset 中文的CNN测试
+使用Chinese-Literature-NER-RE-Dataset 中文的CNN测试, 使用字的token， 还是过拟合较严重
 ```buildoutcfg
 python example/train_supervised_cnn.py --do_train --do_test --dataset liter --word_embedding_size 300
+训练集准确率91%
+100%|██████████████████████████████████████████████████████████████████████████| 337/337 [00:12<00:00, 27.60it/s, acc=0.915, loss=0.265]
 
+2021-03-24 14:30:44,017 - root - INFO - 评估结果 : {'acc': 0.5817236255572066, 'micro_p': 0.5817236255572066, 'micro_r': 0.5817236255572066, 'micro_f1': 0.5817236255572066}.
+2021-03-24 14:30:44,018 - root - INFO - 测试集结果:
+2021-03-24 14:30:44,018 - root - INFO - Accuracy: 0.5817236255572066
+2021-03-24 14:30:44,018 - root - INFO - Micro precision: 0.5817236255572066
+2021-03-24 14:30:44,018 - root - INFO - Micro recall: 0.5817236255572066
+2021-03-24 14:30:44,018 - root - INFO - Micro F1: 0.5817236255572066
 ```
 
 ## Google Group
