@@ -260,18 +260,20 @@ python train_supervised_cnn.py --do_train --do_test --dataset wiki80 --english
 使用Chinese-Literature-NER-RE-Dataset 中文的CNN测试, 使用字的token， 还是过拟合较严重
 ```buildoutcfg
 python example/train_supervised_cnn.py --do_train --do_test --dataset liter --word_embedding_size 300
-训练集准确率91%
-100%|██████████████████████████████████████████████████████████████████████████| 337/337 [00:12<00:00, 27.60it/s, acc=0.915, loss=0.265]
-
-2021-03-24 14:30:44,017 - root - INFO - 评估结果 : {'acc': 0.5817236255572066, 'micro_p': 0.5817236255572066, 'micro_r': 0.5817236255572066, 'micro_f1': 0.5817236255572066}.
-2021-03-24 14:30:44,018 - root - INFO - 测试集结果:
-2021-03-24 14:30:44,018 - root - INFO - Accuracy: 0.5817236255572066
-2021-03-24 14:30:44,018 - root - INFO - Micro precision: 0.5817236255572066
-2021-03-24 14:30:44,018 - root - INFO - Micro recall: 0.5817236255572066
-2021-03-24 14:30:44,018 - root - INFO - Micro F1: 0.5817236255572066
+当运行到第41个epoch时，效果最好，之后开始过拟合，训练集准确率一一直上升知道94%，但是测试集在73-74之间
+2021-03-24 17:36:17,638 - root - INFO - === Epoch 82 val ===
+评估: 100%|██████████| 43/43 [00:00<00:00, 82.35it/s, acc=0.733]
+2021-03-24 17:36:18,161 - root - INFO - 评估结果 : {'acc': 0.7334818114328137, 'micro_p': 0.7334818114328137, 'micro_r': 0.7334818114328137, 'micro_f1': 0.7334818114328137}.
+2021-03-24 17:36:18,161 - root - INFO - Metric micro_f1 current / best: 0.7334818114328137 / 0.743132887899035
+2021-03-24 17:36:18,161 - root - INFO - === Epoch 83 train ===
+100%|██████████| 337/337 [00:08<00:00, 38.64it/s, acc=0.946, loss=0.159]
 ```
 
 #使用PCNN测试 Chinese-Literature-NER-RE-Dataset
+```buildoutcfg
+python example/train_bag_pcnn_att.py  --do_train --do_test --dataset liter --word_embedding_size 300 --batch_size 8
+```
+
 
 ## Google Group
 
