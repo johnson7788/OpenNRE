@@ -17,126 +17,165 @@ def set_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--ckpt', default='', 
-        help='Checkpoint name')
-parser.add_argument('--only_test', action='store_true', 
-        help='Only run test')
 
-# Data
-parser.add_argument('--metric', default='auc', choices=['micro_f1', 'auc'],
-        help='Metric for picking up best checkpoint')
-parser.add_argument('--dataset', default='none', choices=['none', 'wiki_distant', 'nyt10'],
-        help='Dataset. If not none, the following args can be ignored')
-parser.add_argument('--train_file', default='', type=str,
-        help='Training data file')
-parser.add_argument('--val_file', default='', type=str,
-        help='Validation data file')
-parser.add_argument('--test_file', default='', type=str,
-        help='Test data file')
-parser.add_argument('--rel2id_file', default='', type=str,
-        help='Relation to ID file')
+def doargs():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ckpt', default='', help='Checkpoint 名字')
+    parser.add_argument('--do_train', action='store_true', help='训练模型')
+    parser.add_argument('--do_test', action='store_true', help='测试模型')
+    parser.add_argument('--english', action='store_true', help='使用英语的word2vec的，如果数据集是英文的，那么用这个，例如用wiki80时选择这个')
+    # Data
+    parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'], help='选择best checkpoint时使用哪个 Metric')
+    parser.add_argument('--dataset', default='wiki80', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
+            help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
+    parser.add_argument('--train_file', default='', type=str, help='训练数据集')
+    parser.add_argument('--val_file', default='', type=str,help='验证数据集')
+    parser.add_argument('--test_file', default='', type=str, help='测试数据集')
+    parser.add_argument('--rel2id_file', default='', type=str,help='关系到id的映射文件')
+    parser.add_argument('--word_embedding_size', default=50, type=int, help='单词的embedding的尺寸')
 
-# Bag related
-parser.add_argument('--bag_size', type=int, default=0,
-        help='Fixed bag size. If set to 0, use original bag sizes')
+    # Bag related
+    parser.add_argument('--bag_size', type=int, default=0,help='固定bag尺寸。 如果设置为0，使用原来的bag尺寸 ')
 
-# Hyper-parameters
-parser.add_argument('--batch_size', default=160, type=int,
-        help='Batch size')
-parser.add_argument('--lr', default=0.1, type=float,
-        help='Learning rate')
-parser.add_argument('--optim', default='sgd', type=str,
-        help='Optimizer')
-parser.add_argument('--weight_decay', default=1e-5, type=float,
-        help='Weight decay')
-parser.add_argument('--max_length', default=120, type=int,
-        help='Maximum sentence length')
-parser.add_argument('--max_epoch', default=100, type=int,
-        help='Max number of training epochs')
+    # Hyper-parameters
+    parser.add_argument('--batch_size', default=32, type=int,
+            help='Batch size')
+    parser.add_argument('--lr', default=1e-1, type=float,
+            help='Learning rate')
+    parser.add_argument('--weight_decay', default=1e-5, type=float,
+            help='Weight decay')
+    parser.add_argument('--max_length', default=128, type=int,
+                        help='最大序列长度')
+    parser.add_argument('--max_epoch', default=100, type=int,
+                        help='最大训练的epoch')
+    parser.add_argument('--optim', default='sgd', type=str, help = 'Optimizer')
 
-# Others
-parser.add_argument('--seed', default=42, type=int,
-        help='Random seed')
+    # Others
+    parser.add_argument('--seed', default=42, type=int,
+                        help='Random seed')
 
-args = parser.parse_args()
+    args = parser.parse_args()
+    return args
 
-# Set random seed
-set_seed(args.seed)
 
-# Some basic settings
-root_path = '.'
-sys.path.append(root_path)
-if not os.path.exists('ckpt'):
-    os.mkdir('ckpt')
-if len(args.ckpt) == 0:
-    args.ckpt = '{}_{}'.format(args.dataset, 'pcnn_att')
-ckpt = 'ckpt/{}.pth.tar'.format(args.ckpt)
+def load_dataset_and_framework():
+    # Set random seed
+    set_seed(args.seed)
 
-if args.dataset != 'none':
-    opennre.download(args.dataset, root_path=root_path)
-    args.train_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_train.txt'.format(args.dataset))
-    args.val_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_val.txt'.format(args.dataset))
-    if not os.path.exists(args.val_file):
-        logging.info("Cannot find the validation file. Use the test file instead.")
-        args.val_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_test.txt'.format(args.dataset))
-    args.test_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_test.txt'.format(args.dataset))
-    args.rel2id_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_rel2id.json'.format(args.dataset))
-else:
-    if not (os.path.exists(args.train_file) and os.path.exists(args.val_file) and os.path.exists(args.test_file) and os.path.exists(args.rel2id_file)):
-        raise Exception('--train_file, --val_file, --test_file and --rel2id_file are not specified or files do not exist. Or specify --dataset')
+    # Some basic settings
+    root_path = '.'
+    sys.path.append(root_path)
+    if not os.path.exists('ckpt'):
+        os.mkdir('ckpt')
+    if len(args.ckpt) == 0:
+        args.ckpt = '{}_{}'.format(args.dataset, 'pcnn_att')
+    ckpt = 'ckpt/{}.pth.tar'.format(args.ckpt)
 
-logging.info('Arguments:')
-for arg in vars(args):
-    logging.info('    {}: {}'.format(arg, getattr(args, arg)))
+    if args.dataset != 'none':
+        opennre.download(args.dataset, root_path=root_path)
+        args.train_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_train.txt'.format(args.dataset))
+        args.val_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_val.txt'.format(args.dataset))
+        if not os.path.exists(args.val_file):
+            logging.info("Cannot find the validation file. Use the test file instead.")
+            args.val_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_test.txt'.format(args.dataset))
+        args.test_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_test.txt'.format(args.dataset))
+        args.rel2id_file = os.path.join(root_path, 'benchmark', args.dataset, '{}_rel2id.json'.format(args.dataset))
+    else:
+        if not (os.path.exists(args.train_file) and os.path.exists(args.val_file) and os.path.exists(args.test_file) and os.path.exists(args.rel2id_file)):
+            raise Exception('--train_file, --val_file, --test_file and --rel2id_file are not specified or files do not exist. Or specify --dataset')
 
-rel2id = json.load(open(args.rel2id_file))
+    logging.info('Arguments:')
+    for arg in vars(args):
+        logging.info('    {}: {}'.format(arg, getattr(args, arg)))
 
-# Download glove
-opennre.download('glove', root_path=root_path)
-word2id = json.load(open(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_word2id.json')))
-word2vec = np.load(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_mat.npy'))
+    rel2id = json.load(open(args.rel2id_file))
 
-# Define the sentence encoder
-sentence_encoder = opennre.encoder.PCNNEncoder(
-    token2id=word2id,
-    max_length=args.max_length,
-    word_size=50,
-    position_size=5,
-    hidden_size=230,
-    blank_padding=True,
-    kernel_size=3,
-    padding_size=1,
-    word2vec=word2vec,
-    dropout=0.5
-)
 
-# Define the model
-model = opennre.model.BagAttention(sentence_encoder, len(rel2id), rel2id)
+    if args.english:
+        # Download glove
+        opennre.download('glove', root_path=root_path)
+        # 单词到id映射，单词个数400002
+        word2id = json.load(open(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_word2id.json')))
+        # 维度(400000, 50)
+        word2vec = np.load(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_mat.npy'))
+    else:
+        embedding_file = os.path.join(root_path, "pretrain/chinese/model.npy")
+        words_file = os.path.join(root_path, "pretrain/chinese/word2index.json")
+        if os.path.exists(embedding_file):
+            # 690929个单词(690929, 300)
+            word2vec = np.load(embedding_file)
+            # 690929个单词id映射
+            word2id = json.load(open(words_file))
+        else:
+            raise Exception("中文embedding文件不存在，请自己先行训练")
 
-# Define the whole training framework
-framework = opennre.framework.BagRE(
-    train_path=args.train_file,
-    val_path=args.val_file,
-    test_path=args.test_file,
-    model=model,
-    ckpt=ckpt,
-    batch_size=args.batch_size,
-    max_epoch=args.max_epoch,
-    lr=args.lr,
-    weight_decay=args.weight_decay,
-    opt=args.optim,
-    bag_size=args.bag_size)
+    # Define the sentence encoder
+    sentence_encoder = opennre.encoder.PCNNEncoder(
+        token2id=word2id,
+        max_length=args.max_length,
+        word_size=50,
+        position_size=5,
+        hidden_size=230,
+        blank_padding=True,
+        kernel_size=3,
+        padding_size=1,
+        word2vec=word2vec,
+        dropout=0.5
+    )
 
-# Train the model
-if not args.only_test:
-    framework.train_model(args.metric)
+    # Define the model
+    model = opennre.model.BagAttention(sentence_encoder, len(rel2id), rel2id)
 
-# Test the model
-framework.load_state_dict(torch.load(ckpt)['state_dict'])
-result = framework.eval_model(framework.test_loader)
+    # Define the whole training framework
+    myframe = opennre.framework.BagRE(
+        train_path=args.train_file,
+        val_path=args.val_file,
+        test_path=args.test_file,
+        model=model,
+        ckpt=ckpt,
+        batch_size=args.batch_size,
+        max_epoch=args.max_epoch,
+        lr=args.lr,
+        weight_decay=args.weight_decay,
+        opt=args.optim,
+        bag_size=args.bag_size)
+    return myframe, ckpt
 
-# Print the result
-logging.info('Test set results:')
-logging.info('AUC: {}'.format(result['auc']))
-logging.info('Micro F1: {}'.format(result['micro_f1']))
+def dotrain(metric):
+    """
+    使用哪个metric检测checkpoint，并保存
+    :param metric:
+    :return:
+    """
+    #训练模型
+    myframe.train_model(metric)
+
+def dotest(ckpt):
+    #加载训练好的模型，开始测试
+    myframe.load_state_dict(torch.load(ckpt)['state_dict'])
+    result = myframe.eval_model(myframe.test_loader)
+
+    #打印结果
+    logging.info('测试集结果:')
+    logging.info('Accuracy: {}'.format(result['acc']))
+    logging.info('Micro precision: {}'.format(result['micro_p']))
+    logging.info('Micro recall: {}'.format(result['micro_r']))
+    logging.info('Micro F1: {}'.format(result['micro_f1']))
+
+
+if __name__ == '__main__':
+    args = doargs()
+    logfile = "train.log"
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - [%(levelname)s] - %(module)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(logfile, mode='w', encoding='utf-8'),
+        ]
+    )
+    myframe, ckpt = load_dataset_and_framework()
+    if args.do_train:
+        dotrain(args.metric)
+    if args.do_test:
+        dotest(ckpt)
