@@ -224,6 +224,13 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 ```
 
 # 使用CNN训练wiki80, 训练100个epoch，max_seq_length 128
+训练100个epoch时的准确率达91%，但是测试集只有76%，过拟合较严重
+[0 99%|█████████████████████████_ÿ███████████████████▋| 1565/1575 
+[0 100%|██████████████████████████████████████████████| 1575/1575 
+[00:15<00:00, 101.13it/s, acc=0.912, loss=0.281]
+2021-03-24 11:10:03,367 - root - INFO - 评估结果 : {'acc': 0.7628571428571429, 'micro_p': 0.7628571428571429, 'micro_r': 0.7628571428571429, 'micro_f1': 0.762857142857143}.
+2021-03-24 11:10:03,367 - root - INFO - Test set results:
+2021-03-24 11:10:03,367 - root - INFO - Accuracy: 0.7628571428571429
 
 
 # 使用Chinese-Literature-NER-RE-Dataset

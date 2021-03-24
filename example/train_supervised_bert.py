@@ -114,9 +114,14 @@ def load_dataset_and_framework():
     )
     return myframe, ckpt
 
-def dotrain():
+def dotrain(metric):
+    """
+    使用哪个metric检测checkpoint，并保存
+    :param metric:
+    :return:
+    """
     #训练模型
-    myframe.train_model('micro_f1')
+    myframe.train_model(metric)
 
 def dotest(ckpt):
     #加载训练好的模型，开始测试
@@ -124,7 +129,7 @@ def dotest(ckpt):
     result = myframe.eval_model(myframe.test_loader)
 
     #打印结果
-    logging.info('Test set results:')
+    logging.info('测试集结果:')
     logging.info('Accuracy: {}'.format(result['acc']))
     logging.info('Micro precision: {}'.format(result['micro_p']))
     logging.info('Micro recall: {}'.format(result['micro_r']))
@@ -143,6 +148,6 @@ if __name__ == '__main__':
     )
     myframe, ckpt = load_dataset_and_framework()
     if args.do_train:
-        dotrain()
+        dotrain(args.metric)
     if args.do_test:
         dotest(ckpt)
