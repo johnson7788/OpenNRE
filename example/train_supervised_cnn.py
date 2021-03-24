@@ -76,8 +76,8 @@ def load_dataset_and_framework():
         # 维度(400000, 50)
         word2vec = np.load(os.path.join(root_path, 'pretrain/glove/glove.6B.50d_mat.npy'))
     else:
-        embedding_file = "/opt/sentiment_pytorch/embedding/model.npy"
-        words_file = "/opt/sentiment_pytorch/embedding/word2index.json"
+        embedding_file = os.path.join(root_path, "pretrain/chinese/model.npy")
+        words_file = os.path.join(root_path, "pretrain/chinese/word2index.json")
         if os.path.exists(embedding_file):
             # 690929个单词(690929, 300)
             word2vec = np.load(embedding_file)
