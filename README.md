@@ -261,7 +261,6 @@ python train_supervised_cnn.py --do_train --do_test --dataset wiki80 --english
 ```buildoutcfg
 python example/train_supervised_cnn.py --do_train --do_test --dataset liter --word_embedding_size 300
 
-
 ```
 
 ## Google Group

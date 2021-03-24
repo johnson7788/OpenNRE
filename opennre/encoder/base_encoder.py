@@ -84,9 +84,9 @@ class BaseEncoder(nn.Module):
     def tokenize(self, item):
         """
         Args:
-            item: input instance, including sentence, entity positions, etc.
+            item: etc.输入实例，包括句子、实体位置等。 eg: {'text': '迎宾。\n矫健，柔韧的击缶舞姿和着春雷般隆隆的鼓声，粗犷地欢呼“有朋自远方来，不亦乐乎，”声震夜空。让我们领略了先贤“我有嘉宾，鼓瑟吹笙”的意境。\n礼花喷涌，照亮夜空，电光闪烁，欢声雷动。北京以它最隆重的礼仪，热烈欢迎来自五大洲的奥运健儿与四海宾朋。\n“歌', 'h': {'name': '嘉宾', 'id': 'T61', 'pos': [545, 547]}, 't': {'name': '笙', 'id': 'T63', 'pos': [551, 552]}, 'relation': 'Use'}
         Return:
-            index number of tokens and positions             
+            tokens的索引数和positions
         """
         if 'text' in item:
             sentence = item['text']
@@ -105,6 +105,7 @@ class BaseEncoder(nn.Module):
             else:
                 pos_min, pos_max = [pos_head, pos_tail]
                 rev = False
+            #对一个句子的每个部分都分布tokenizer
             sent_0 = self.tokenizer.tokenize(sentence[:pos_min[0]])
             sent_1 = self.tokenizer.tokenize(sentence[pos_min[1]:pos_max[0]])
             sent_2 = self.tokenizer.tokenize(sentence[pos_max[1]:])
@@ -123,7 +124,7 @@ class BaseEncoder(nn.Module):
         else:
             tokens = sentence
 
-        # Token -> index
+        # Token -> index, Token转换成id
         if self.blank_padding:
             indexed_tokens = self.tokenizer.convert_tokens_to_ids(tokens, self.max_length, self.token2id['[PAD]'], self.token2id['[UNK]'])
         else:

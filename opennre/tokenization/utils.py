@@ -188,7 +188,16 @@ def printable_text(text):
         raise ValueError("Not running on Python2 or Python 3?")
 
 def convert_by_vocab(vocab, items, max_seq_length = None, blank_id = 0, unk_id = 1, uncased = True):
-    """Converts a sequence of [tokens|ids] using the vocab."""
+    """
+    使用单词转换一个[tokens|ids]序列。
+    :param vocab: 单词到id的映射
+    :param items: 句子tokenizer后的token列表
+    :param max_seq_length: 最大序列长度
+    :param blank_id:  PAD的id,
+    :param unk_id:  UNK的id,
+    :param uncased: 是否忽略大小写
+    :return:
+    """
     output = []
     for item in items:
         if uncased:
@@ -197,6 +206,7 @@ def convert_by_vocab(vocab, items, max_seq_length = None, blank_id = 0, unk_id =
             output.append(vocab[item])
         else:
             output.append(unk_id)
+    # print(f"这个句子中的UNK的数量是{sum([1 for i in output if i == unk_id])}")
     if max_seq_length != None:
         if len(output) > max_seq_length:
             output = output[:max_seq_length]
