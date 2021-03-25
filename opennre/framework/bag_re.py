@@ -5,6 +5,7 @@ from .data_loader import SentenceRELoader, BagRELoader
 from .utils import AverageMeter
 from tqdm import tqdm
 import os
+import logging
 
 class BagRE(nn.Module):
 
@@ -102,7 +103,7 @@ class BagRE(nn.Module):
         for epoch in range(self.max_epoch):
             # Train
             self.train()
-            print("=== Epoch %d train ===" % epoch)
+            logging.info("=== Epoch %d train ===" % epoch)
             avg_loss = AverageMeter()
             avg_acc = AverageMeter()
             avg_pos_acc = AverageMeter()
@@ -142,12 +143,12 @@ class BagRE(nn.Module):
                 self.optimizer.zero_grad()
 
             # Val 
-            print("=== Epoch %d val ===" % epoch)
+            logging.info("=== Epoch %d val ===" % epoch)
             result = self.eval_model(self.val_loader)
-            print("AUC: %.4f" % result['auc'])
-            print("Micro F1: %.4f" % (result['micro_f1']))
+            logging.info(f'指标名称: {metric}, 当前的指标: {result[metric]}, 最好的指标: {best_metric}')
             if result[metric] > best_metric:
-                print("Best ckpt and saved.")
+                logging.info(f"获得了更好的metric {result[metric]},保存模型")
+                logging.info("AUC: %.4f, Micro F1: %.4f, Accuracy: %.4f" % (result['auc'],result['micro_f1'],result['acc'] ))
                 torch.save({'state_dict': self.model.module.state_dict()}, self.ckpt)
                 best_metric = result[metric]
         print("Best %s on val set: %f" % (metric, best_metric))
