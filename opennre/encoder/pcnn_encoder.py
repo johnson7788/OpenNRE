@@ -26,8 +26,8 @@ class PCNNEncoder(BaseEncoder):
         """
         Args:
             token2id: dictionary of token->idx mapping
-            max_length: max length of sentence, used for postion embedding
-            hidden_size: hidden size
+            max_length: 最大序列长度, used for postion embedding
+            hidden_size: 隐藏层维度
             word_size: size of word embedding
             position_size: size of position embedding
             blank_padding: padding for CNN
@@ -54,20 +54,21 @@ class PCNNEncoder(BaseEncoder):
     def forward(self, token, pos1, pos2, mask):
         """
         Args:
-            token: (B, L), index of tokens
-            pos1: (B, L), relative position to head entity
-            pos2: (B, L), relative position to tail entity
+            token: (Batch_size*bag_size, seq_length), index of tokens
+            pos1: (Batch_size*bag_size, seq_length), relative position to head entity
+            pos2: (Batch_size*bag_size, seq_length), relative position to tail entity
         Return:
-            (B, EMBED), representations for sentences
+            (Batch_size*bag_size, EMBED), representations for sentences
         """
         # Check size of tensors
         if len(token.size()) != 2 or token.size() != pos1.size() or token.size() != pos2.size():
             raise Exception("Size of token, pos1 ans pos2 should be (B, L)")
         x = torch.cat([self.word_embedding(token), 
-                       self.pos1_embedding(pos1), 
-                       self.pos2_embedding(pos2)], 2) # (B, L, EMBED)
-        x = x.transpose(1, 2) # (B, EMBED, L)
-        x = self.conv(x) # (B, H, L)
+                       self.pos1_embedding(pos1),   #生成的x的embedding_size是word和pos1和pos2的embedding的拼接
+                       self.pos2_embedding(pos2)], 2) # x的维度变成 torch.Size([480, 128, 310]), (Batch_size*bag_size, seq_length, embedding_size)
+        x = x.transpose(1, 2) # 维度交换，现在是 (Batch_size*bag_size, embedding_size, seq_length)
+        # 这时输入的x的维度应该是 (Batch_size, Channel_in, seq_length), Channel_in是embedding_size, 输出的是:
+        x = self.conv(x)
 
         mask = 1 - self.mask_embedding(mask).transpose(1, 2) # (B, L) -> (B, L, 3) -> (B, 3, L)
         pool1 = self.pool(self.act(x + self._minus * mask[:, 0:1, :])) # (B, H, 1)
@@ -87,7 +88,7 @@ class PCNNEncoder(BaseEncoder):
             pos_end: [start, end], position of the tail entity
             is_token: if is_token == True, sentence becomes an array of token
         Return:
-            Name of the relation of the sentence
+            Name of the relation of the sentence, 返回的4个特征的维度都是 (1, batch_size)
         """
         if 'text' in item:
             sentence = item['text']

@@ -141,7 +141,7 @@ def SentenceRELoader(path, rel2id, tokenizer, batch_size,
 
 class BagREDataset(data.Dataset):
     """
-    Bag-level relation extraction dataset. Note that relation of NA should be named as 'NA'.
+    Bag-level关系抽取数据集。注意，NA的关系应该命名为 "NA"
     """
     def __init__(self, path, rel2id, tokenizer, entpair_as_bag=False, bag_size=0, mode=None):
         """
@@ -168,7 +168,7 @@ class BagREDataset(data.Dataset):
                 self.data.append(eval(line))
         f.close()
 
-        # Construct bag-level dataset (a bag contains instances sharing the same relation fact)
+        #构造bag-level数据集（一个包含共享相同关系事实的实例）。  Construct bag-level dataset (a bag contains instances sharing the same relation fact)
         if mode == None:
             self.weight = np.ones((len(self.rel2id)), dtype=np.float32)
             self.bag_scope = []
@@ -217,8 +217,9 @@ class BagREDataset(data.Dataset):
                     seqs.append([])
             for i in range(len(seq)):
                 seqs[i].append(seq[i])
-        for i in range(len(seqs)):
-            seqs[i] = torch.cat(seqs[i], 0) # (n, L), n is the size of bag
+        for i in range(len(seqs)):   #seqs 里面包含4个特征，每个特征是一个bag数量的元素，每个元素的维度是1，seq_length
+            seqs[i] = torch.cat(seqs[i], 0) # (n, L), 拼接后，seqs还是4个元素，每个元素的维度变成(bag_size, seq_length)
+        # 返回, rel: 0 关系的id， 关系的名称: ('T51', 'T52', 'Family'),  len(bag): bag_size, seqs: (bag_size, seq_length)
         return [rel, self.bag_name[index], len(bag)] + seqs
   
     def collate_fn(data):
@@ -240,16 +241,19 @@ class BagREDataset(data.Dataset):
 
     def collate_bag_size_fn(data):
         data = list(zip(*data))
+        # label: 一个batch的列表 (0, 5, 3, 3, 3, 5, 3, 4), bag_name: Batch_size大小，每个元素类似 ('T223', 'T210', 'Family')， count: 一个batch中每个bag_size大小 (60, 60, 60, 60, 60, 60, 60, 60)
         label, bag_name, count = data[:3]
+        #只要text_id, pos1_id, pos2_id, mask的id先不要
         seqs = data[3:]
         for i in range(len(seqs)):
-            seqs[i] = torch.stack(seqs[i], 0) # (batch, bag, L)
+            seqs[i] = torch.stack(seqs[i], 0) # (batch, bag, L), seqs里的每个元素维度变成 [batch_size, bag_size, seq_length]
         scope = [] # (B, 2)
         start = 0
         for c in count:
             scope.append((start, start + c))
             start += c
         label = torch.tensor(label).long() # (B)
+        # scope 是每个bag的个数的边界记录
         return [label, bag_name, scope] + seqs
 
   

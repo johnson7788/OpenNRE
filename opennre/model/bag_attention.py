@@ -63,21 +63,21 @@ class BagAttention(BagRE):
     def forward(self, label, scope, token, pos1, pos2, mask=None, train=True, bag_size=0):
         """
         Args:
-            label: (B), label of the bag
-            scope: (B), scope for each bag
-            token: (nsum, L), index of tokens
-            pos1: (nsum, L), relative position to head entity
-            pos2: (nsum, L), relative position to tail entity
-            mask: (nsum, L), used for piece-wise CNN
+            label: (B), label of the bag,  batch_size
+            scope: (B), scope for each bag, batch_size   eg: 其中2个元素  00 = {tuple: 2} (0, 60)    01 = {tuple: 2} (60, 120)
+            token: (nsum, L), index of tokens, shape torch.Size([8, 60, 128]) , (batch_size,bag_size, seq_length)
+            pos1: (nsum, L), relative position to head entity   shape torch.Size([8, 60, 128]) , (batch_size,bag_size, seq_length)
+            pos2: (nsum, L), relative position to tail entity  shape torch.Size([8, 60, 128]) , (batch_size,bag_size, seq_length)
+            mask: (nsum, L), used for piece-wise CNN, shape torch.Size([8, 60, 128]) , (batch_size,bag_size, seq_length)
         Return:
             logits, (B, N)
         """
         if bag_size > 0:
-            token = token.view(-1, token.size(-1))
-            pos1 = pos1.view(-1, pos1.size(-1))
-            pos2 = pos2.view(-1, pos2.size(-1))
+            token = token.view(-1, token.size(-1))    #[Batch_size * bag_size, seq_length],  shape: torch.Size([480, 128])
+            pos1 = pos1.view(-1, pos1.size(-1))   #[Batch_size * bag_size, seq_length]
+            pos2 = pos2.view(-1, pos2.size(-1))   #[Batch_size * bag_size, seq_length]
             if mask is not None:
-                mask = mask.view(-1, mask.size(-1))
+                mask = mask.view(-1, mask.size(-1))   ##[Batch_size * bag_size, seq_length]
         else:
             begin, end = scope[0][0], scope[-1][1]
             token = token[:, begin:end, :].view(-1, token.size(-1))

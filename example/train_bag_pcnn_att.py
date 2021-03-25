@@ -113,7 +113,7 @@ def load_dataset_and_framework():
     sentence_encoder = opennre.encoder.PCNNEncoder(
         token2id=word2id,
         max_length=args.max_length,
-        word_size=50,
+        word_size=args.word_embedding_size,
         position_size=5,
         hidden_size=230,
         blank_padding=True,

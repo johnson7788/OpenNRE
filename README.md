@@ -128,99 +128,38 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 #如果没有下载， 那么指定默认名称
 python example/train_supervised_bert.py --pretrain_path bert-base-uncased --dataset wiki80 --pooler entity --do_train --do_test
 
-2021-03-15 08:07:32,414 - root - WARNING - Test file ./benchmark/wiki80/wiki80_test.txt does not exist! Use val file instead
-2021-03-15 08:07:32,414 - root - INFO - 参数:
-2021-03-15 08:07:32,414 - root - INFO -     pretrain_path: bert-base-uncased
-2021-03-15 08:07:32,414 - root - INFO -     ckpt: wiki80_bert-base-uncased_entity
-2021-03-15 08:07:32,414 - root - INFO -     pooler: entity
-2021-03-15 08:07:32,414 - root - INFO -     only_test: False
-2021-03-15 08:07:32,414 - root - INFO -     mask_entity: False
-2021-03-15 08:07:32,414 - root - INFO -     metric: acc
-2021-03-15 08:07:32,414 - root - INFO -     dataset: wiki80
-2021-03-15 08:07:32,415 - root - INFO -     train_file: ./benchmark/wiki80/wiki80_train.txt
-2021-03-15 08:07:32,415 - root - INFO -     val_file: ./benchmark/wiki80/wiki80_val.txt
-2021-03-15 08:07:32,415 - root - INFO -     test_file: ./benchmark/wiki80/wiki80_val.txt
-2021-03-15 08:07:32,415 - root - INFO -     rel2id_file: ./benchmark/wiki80/wiki80_rel2id.json
-2021-03-15 08:07:32,415 - root - INFO -     batch_size: 16
-2021-03-15 08:07:32,415 - root - INFO -     lr: 2e-05
-2021-03-15 08:07:32,415 - root - INFO -     max_length: 128
-2021-03-15 08:07:32,415 - root - INFO -     max_epoch: 3
-2021-03-15 08:07:32,415 - root - INFO - 加载 BERT pre-trained checkpoint.
-2021-03-15 08:07:32,630 - filelock - INFO - Lock 139806039272528 acquired on /root/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.637c6035640bacb831febcc2b7f7bee0a96f9b30c2d7e9ef84082d9f252f3170.lock
-Downloading: 100% 433/433 [00:00<00:00, 553kB/s]
-2021-03-15 08:07:32,845 - filelock - INFO - Lock 139806039272528 released on /root/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.637c6035640bacb831febcc2b7f7bee0a96f9b30c2d7e9ef84082d9f252f3170.lock
-2021-03-15 08:07:33,050 - filelock - INFO - Lock 139806178812176 acquired on /root/.cache/huggingface/transformers/a8041bf617d7f94ea26d15e218abd04afc2004805632abc0ed2066aa16d50d04.faf6ea826ae9c5867d12b22257f9877e6b8367890837bd60f7c54a29633f7f2f.lock
-Downloading: 100% 440M/440M [00:06<00:00, 65.1MB/s]
-2021-03-15 08:07:40,025 - filelock - INFO - Lock 139806178812176 released on /root/.cache/huggingface/transformers/a8041bf617d7f94ea26d15e218abd04afc2004805632abc0ed2066aa16d50d04.faf6ea826ae9c5867d12b22257f9877e6b8367890837bd60f7c54a29633f7f2f.lock
-2021-03-15 08:07:42,691 - filelock - INFO - Lock 139806022911376 acquired on /root/.cache/huggingface/transformers/45c3f7a79a80e1cf0a489e5c62b43f173c15db47864303a55d623bb3c96f72a5.d789d64ebfe299b0e416afc4a169632f903f693095b4629a7ea271d5a0cf2c99.lock
-Downloading: 100% 232k/232k [00:00<00:00, 921kB/s]
-2021-03-15 08:07:43,149 - filelock - INFO - Lock 139806022911376 released on /root/.cache/huggingface/transformers/45c3f7a79a80e1cf0a489e5c62b43f173c15db47864303a55d623bb3c96f72a5.d789d64ebfe299b0e416afc4a169632f903f693095b4629a7ea271d5a0cf2c99.lock
-2021-03-15 08:07:46,914 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_train.txt with 50400 行和80 个关系.
-2021-03-15 08:07:47,282 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_val.txt with 5600 行和80 个关系.
-2021-03-15 08:07:47,882 - root - INFO - 加载 RE 数据集 ./benchmark/wiki80/wiki80_val.txt with 5600 行和80 个关系.
-2021-03-15 08:07:47,885 - root - INFO - 检测到GPU可用，使用GPU
-2021-03-15 08:07:50,794 - root - INFO - === Epoch 0 train ===
-100% 3150/3150 [21:27<00:00,  2.45it/s, acc=0.806, loss=0.788]
-2021-03-15 08:29:18,109 - root - INFO - === Epoch 0 val ===
-100% 350/350 [00:51<00:00,  6.76it/s, acc=0.858]
-2021-03-15 08:30:09,911 - root - INFO - Evaluation result: {'acc': 0.8576785714285714, 'micro_p': 0.8576785714285714, 'micro_r': 0.8576785714285714, 'micro_f1': 0.8576785714285715}.
-2021-03-15 08:30:09,911 - root - INFO - Metric micro_f1 current / best: 0.8576785714285715 / 0
-2021-03-15 08:30:09,911 - root - INFO - Best ckpt and saved.
-2021-03-15 08:30:11,301 - root - INFO - === Epoch 1 train ===
-100% 3150/3150 [21:37<00:00,  2.43it/s, acc=0.928, loss=0.245]
-2021-03-15 08:51:48,797 - root - INFO - === Epoch 1 val ===
-100% 350/350 [00:51<00:00,  6.78it/s, acc=0.867]
-2021-03-15 08:52:40,398 - root - INFO - Evaluation result: {'acc': 0.8669642857142857, 'micro_p': 0.8669642857142857, 'micro_r': 0.8669642857142857, 'micro_f1': 0.8669642857142857}.
-2021-03-15 08:52:40,398 - root - INFO - Metric micro_f1 current / best: 0.8669642857142857 / 0.8576785714285715
-2021-03-15 08:52:40,398 - root - INFO - Best ckpt and saved.
-2021-03-15 08:52:41,666 - root - INFO - === Epoch 2 train ===
-100% 3150/3150 [21:18<00:00,  2.46it/s, acc=0.957, loss=0.149]
-2021-03-15 09:14:00,638 - root - INFO - === Epoch 2 val ===
-100% 350/350 [00:51<00:00,  6.77it/s, acc=0.87]
-2021-03-15 09:14:52,355 - root - INFO - Evaluation result: {'acc': 0.8703571428571428, 'micro_p': 0.8703571428571428, 'micro_r': 0.8703571428571428, 'micro_f1': 0.8703571428571429}.
-2021-03-15 09:14:52,355 - root - INFO - Metric micro_f1 current / best: 0.8703571428571429 / 0.8669642857142857
-2021-03-15 09:14:52,355 - root - INFO - Best ckpt and saved.
-2021-03-15 09:14:53,672 - root - INFO - Best micro_f1 on val set: 0.870357
-100% 350/350 [00:51<00:00,  6.76it/s, acc=0.87]
-2021-03-15 09:15:45,670 - root - INFO - Evaluation result: {'acc': 0.8703571428571428, 'micro_p': 0.8703571428571428, 'micro_r': 0.8703571428571428, 'micro_f1': 0.8703571428571429}.
-2021-03-15 09:15:45,670 - root - INFO - Test set results:
-2021-03-15 09:15:45,670 - root - INFO - Accuracy: 0.8703571428571428
-2021-03-15 09:15:45,670 - root - INFO - Micro precision: 0.8703571428571428
-2021-03-15 09:15:45,670 - root - INFO - Micro recall: 0.8703571428571428
-2021-03-15 09:15:45,670 - root - INFO - Micro F1: 0.8703571428571429
+2021-03-25 10:00:40,333 - root - INFO - === Epoch 9 train ===
+100%|██████████| 674/674 [02:16<00:00,  4.92it/s, acc=0.871, loss=0.376]
+2021-03-25 10:02:57,325 - root - INFO - === Epoch 9 val ===
+评估: 100%|██████████| 85/85 [00:06<00:00, 13.46it/s, acc=0.654]
+2021-03-25 10:03:03,642 - root - INFO - 评估结果 : {'acc': 0.6540460282108389, 'micro_p': 0.6540460282108389, 'micro_r': 0.6540460282108389, 'micro_f1': 0.6540460282108389}.
+2021-03-25 10:03:03,642 - root - INFO - 指标名称: micro_f1, 当前的指标: 0.6540460282108389, 最好的指标: 0.6525612472160356
+2021-03-25 10:03:03,642 - root - INFO - 获得了更好的metric 0.6540460282108389,保存模型
+2021-03-25 10:03:06,618 - root - INFO - Best micro_f1 on val set: 0.654046
+评估: 100%|██████████| 85/85 [00:06<00:00, 13.45it/s, acc=0.653]
+2021-03-25 10:03:13,138 - root - INFO - 评估结果 : {'acc': 0.6530460624071323, 'micro_p': 0.6530460624071323, 'micro_r': 0.6530460624071323, 'micro_f1': 0.6530460624071323}.
+2021-03-25 10:03:13,138 - root - INFO - 测试集结果:
+2021-03-25 10:03:13,138 - root - INFO - Accuracy: 0.6530460624071323
+2021-03-25 10:03:13,138 - root - INFO - Micro precision: 0.6530460624071323
+2021-03-25 10:03:13,138 - root - INFO - Micro recall: 0.6530460624071323
+2021-03-25 10:03:13,138 - root - INFO - Micro F1: 0.6530460624071323
 
 #使用cls的方式, 效果比实体的方式差
 python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncased --dataset wiki80 --pooler cls --do_train --do_test
 
-2021-03-16 01:11:58,524 - root - INFO - === Epoch 0 train ===
-100% 3150/3150 [19:11<00:00,  2.73it/s, acc=0.668, loss=1.44]
-2021-03-16 01:31:10,290 - root - INFO - === Epoch 0 val ===
-100% 350/350 [00:45<00:00,  7.74it/s, acc=0.798]
-2021-03-16 01:31:55,504 - root - INFO - Evaluation result: {'acc': 0.7983928571428571, 'micro_p': 0.7983928571428571, 'micro_r': 0.7983928571428571, 'micro_f1': 0.7983928571428571}.
-2021-03-16 01:31:55,504 - root - INFO - Metric micro_f1 current / best: 0.7983928571428571 / 0
-2021-03-16 01:31:55,504 - root - INFO - Best ckpt and saved.
-2021-03-16 01:31:56,855 - root - INFO - === Epoch 1 train ===
-100% 3150/3150 [19:20<00:00,  2.72it/s, acc=0.876, loss=0.446]
-2021-03-16 01:51:17,022 - root - INFO - === Epoch 1 val ===
-100% 350/350 [00:45<00:00,  7.73it/s, acc=0.838]
-2021-03-16 01:52:02,291 - root - INFO - Evaluation result: {'acc': 0.8382142857142857, 'micro_p': 0.8382142857142857, 'micro_r': 0.8382142857142857, 'micro_f1': 0.8382142857142857}.
-2021-03-16 01:52:02,291 - root - INFO - Metric micro_f1 current / best: 0.8382142857142857 / 0.7983928571428571
-2021-03-16 01:52:02,292 - root - INFO - Best ckpt and saved.
-2021-03-16 01:52:03,477 - root - INFO - === Epoch 2 train ===
-100% 3150/3150 [19:19<00:00,  2.72it/s, acc=0.923, loss=0.278]
-2021-03-16 02:11:22,763 - root - INFO - === Epoch 2 val ===
-100% 350/350 [00:45<00:00,  7.75it/s, acc=0.85]
-2021-03-16 02:12:07,930 - root - INFO - Evaluation result: {'acc': 0.8498214285714286, 'micro_p': 0.8498214285714286, 'micro_r': 0.8498214285714286, 'micro_f1': 0.8498214285714286}.
-2021-03-16 02:12:07,930 - root - INFO - Metric micro_f1 current / best: 0.8498214285714286 / 0.8382142857142857
-2021-03-16 02:12:07,930 - root - INFO - Best ckpt and saved.
-2021-03-16 02:12:09,198 - root - INFO - Best micro_f1 on val set: 0.849821
-100% 350/350 [00:45<00:00,  7.72it/s, acc=0.85]
-2021-03-16 02:12:54,762 - root - INFO - Evaluation result: {'acc': 0.8498214285714286, 'micro_p': 0.8498214285714286, 'micro_r': 0.8498214285714286, 'micro_f1': 0.8498214285714286}.
-2021-03-16 02:12:54,762 - root - INFO - Test set results:
-2021-03-16 02:12:54,763 - root - INFO - Accuracy: 0.8498214285714286
-2021-03-16 02:12:54,763 - root - INFO - Micro precision: 0.8498214285714286
-2021-03-16 02:12:54,763 - root - INFO - Micro recall: 0.8498214285714286
-2021-03-16 02:12:54,763 - root - INFO - Micro F1: 0.8498214285714286
+2021-03-25 12:35:34,845 - root - INFO - === Epoch 9 val ===
+评估: 100%|██████████| 85/85 [00:06<00:00, 13.55it/s, acc=0.615]
+2021-03-25 12:35:41,120 - root - INFO - 评估结果 : {'acc': 0.6146993318485523, 'micro_p': 0.6146993318485523, 'micro_r': 0.6146993318485523, 'micro_f1': 0.6146993318485523}.
+2021-03-25 12:35:41,120 - root - INFO - 指标名称: micro_f1, 当前的指标: 0.6146993318485523, 最好的指标: 0.6043058648849294
+2021-03-25 12:35:41,120 - root - INFO - 获得了更好的metric 0.6146993318485523,保存模型
+2021-03-25 12:35:44,112 - root - INFO - Best micro_f1 on val set: 0.614699
+评估: 100%|██████████| 85/85 [00:11<00:00,  7.35it/s, acc=0.63] 
+2021-03-25 12:35:55,874 - root - INFO - 评估结果 : {'acc': 0.6300148588410104, 'micro_p': 0.6300148588410104, 'micro_r': 0.6300148588410104, 'micro_f1': 0.6300148588410104}.
+2021-03-25 12:35:55,874 - root - INFO - 测试集结果:
+2021-03-25 12:35:55,874 - root - INFO - Accuracy: 0.6300148588410104
+2021-03-25 12:35:55,874 - root - INFO - Micro precision: 0.6300148588410104
+2021-03-25 12:35:55,874 - root - INFO - Micro recall: 0.6300148588410104
+2021-03-25 12:35:55,874 - root - INFO - Micro F1: 0.6300148588410104
 ```
 
 # 使用CNN训练wiki80, 训练100个epoch，max_seq_length 128
@@ -238,35 +177,33 @@ python train_supervised_cnn.py --do_train --do_test --dataset wiki80 --english
 
 # 使用Chinese-Literature-NER-RE-Dataset
 ```buildoutcfg
-长度128，3个epoch
-2021-03-19 17:44:51,771 - root - INFO - 评估结果 : {'acc': 0.736998514115899, 'micro_p': 0.736998514115899, 'micro_r': 0.736998514115899, 'micro_f1': 0.736998514115899}.
-2021-03-19 17:44:51,771 - root - INFO - Test set results:
-2021-03-19 17:44:51,771 - root - INFO - Accuracy: 0.736998514115899
-2021-03-19 17:44:51,771 - root - INFO - Micro precision: 0.736998514115899
-2021-03-19 17:44:51,771 - root - INFO - Micro recall: 0.736998514115899
-2021-03-19 17:44:51,771 - root - INFO - Micro F1: 0.736998514115899
+bert 长度128，3个epoch
+
 ```
 
 ```buildoutcfg
-长度198，3个epoch
-2021-03-19 18:01:40,730 - root - INFO - 评估结果 : {'acc': 0.7288261515601783, 'micro_p': 0.7288261515601783, 'micro_r': 0.7288261515601783, 'micro_f1': 0.7288261515601783}.
-2021-03-19 18:01:40,730 - root - INFO - Test set results:
-2021-03-19 18:01:40,730 - root - INFO - Accuracy: 0.7288261515601783
-2021-03-19 18:01:40,730 - root - INFO - Micro precision: 0.7288261515601783
-2021-03-19 18:01:40,730 - root - INFO - Micro recall: 0.7288261515601783
-2021-03-19 18:01:40,730 - root - INFO - Micro F1: 0.7288261515601783
+bert 长度198，3个epoch
+
 ```
 
 使用Chinese-Literature-NER-RE-Dataset 中文的CNN测试, 使用字的token， 还是过拟合较严重
 ```buildoutcfg
 python example/train_supervised_cnn.py --do_train --do_test --dataset liter --word_embedding_size 300
 当运行到第41个epoch时，效果最好，之后开始过拟合，训练集准确率一一直上升知道94%，但是测试集在73-74之间
-2021-03-24 17:36:17,638 - root - INFO - === Epoch 82 val ===
-评估: 100%|██████████| 43/43 [00:00<00:00, 82.35it/s, acc=0.733]
-2021-03-24 17:36:18,161 - root - INFO - 评估结果 : {'acc': 0.7334818114328137, 'micro_p': 0.7334818114328137, 'micro_r': 0.7334818114328137, 'micro_f1': 0.7334818114328137}.
-2021-03-24 17:36:18,161 - root - INFO - Metric micro_f1 current / best: 0.7334818114328137 / 0.743132887899035
-2021-03-24 17:36:18,161 - root - INFO - === Epoch 83 train ===
-100%|██████████| 337/337 [00:08<00:00, 38.64it/s, acc=0.946, loss=0.159]
+2021-03-25 13:12:42,106 - root - INFO - === Epoch 41 train ===
+100%|██████████| 337/337 [00:22<00:00, 14.97it/s, acc=0.882, loss=0.352]
+2021-03-25 13:13:04,617 - root - INFO - === Epoch 41 val ===
+评估: 100%|██████████| 43/43 [00:00<00:00, 54.62it/s, acc=0.723]
+2021-03-25 13:13:05,405 - root - INFO - 评估结果 : {'acc': 0.7230883444691908, 'micro_p': 0.7230883444691908, 'micro_r': 0.7230883444691908, 'micro_f1': 0.7230883444691908}.
+2021-03-25 13:13:05,405 - root - INFO - 指标名称: micro_f1, 当前的指标: 0.7230883444691908, 最好的指标: 0.7245731254639941
+2021-03-25 13:13:05,405 - root - INFO - Best micro_f1 on val set: 0.724573
+评估: 100%|██████████| 43/43 [00:00<00:00, 54.60it/s, acc=0.727]
+2021-03-25 13:13:06,714 - root - INFO - 评估结果 : {'acc': 0.7273402674591382, 'micro_p': 0.7273402674591382, 'micro_r': 0.7273402674591382, 'micro_f1': 0.7273402674591382}.
+2021-03-25 13:13:06,714 - root - INFO - 测试集结果:
+2021-03-25 13:13:06,714 - root - INFO - Accuracy: 0.7273402674591382
+2021-03-25 13:13:06,714 - root - INFO - Micro precision: 0.7273402674591382
+2021-03-25 13:13:06,714 - root - INFO - Micro recall: 0.7273402674591382
+2021-03-25 13:13:06,714 - root - INFO - Micro F1: 0.7273402674591382
 ```
 
 #使用PCNN测试 Chinese-Literature-NER-RE-Dataset

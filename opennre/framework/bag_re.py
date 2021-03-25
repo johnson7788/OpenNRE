@@ -117,6 +117,7 @@ class BagRE(nn.Module):
                 label = data[0]
                 bag_name = data[1]
                 scope = data[2]
+                # args的元素的维度是[batch_size, bag_size, seq_len]
                 args = data[3:]
                 logits = self.model(label, scope, *args, bag_size=self.bag_size)
                 loss = self.criterion(logits, label)
