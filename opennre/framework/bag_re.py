@@ -148,7 +148,7 @@ class BagRE(nn.Module):
             logging.info(f'指标名称: {metric}, 当前的指标: {result[metric]}, 最好的指标: {best_metric}')
             if result[metric] > best_metric:
                 logging.info(f"获得了更好的metric {result[metric]},保存模型")
-                logging.info("AUC: %.4f, Micro F1: %.4f, Accuracy: %.4f" % (result['auc'],result['micro_f1'],result['acc'] ))
+                logging.info("AUC: %.4f, Micro F1: %.4f, Accuracy: %s" % (result['auc'],result['micro_f1'],result['acc'] ))
                 torch.save({'state_dict': self.model.module.state_dict()}, self.ckpt)
                 best_metric = result[metric]
         print("Best %s on val set: %f" % (metric, best_metric))

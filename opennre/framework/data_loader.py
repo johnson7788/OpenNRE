@@ -278,12 +278,14 @@ class BagREDataset(data.Dataset):
                 correct += 1
             prec.append(float(correct) / float(i + 1))
             rec.append(float(correct) / float(total))
+        #准确率好像有问题，计算时entpair是不需要提供的
+        # acc = float(correct) / float(total)
         auc = sklearn.metrics.auc(x=rec, y=prec)
         np_prec = np.array(prec)
         np_rec = np.array(rec) 
         f1 = (2 * np_prec * np_rec / (np_prec + np_rec + 1e-20)).max()
         mean_prec = np_prec.mean()
-        return {'micro_p': np_prec, 'micro_r': np_rec, 'micro_p_mean': mean_prec, 'micro_f1': f1, 'auc': auc}
+        return {'micro_p': np_prec, 'micro_r': np_rec, 'micro_p_mean': mean_prec, 'micro_f1': f1, 'auc': auc, 'acc':'None'}
 
 def BagRELoader(path, rel2id, tokenizer, batch_size, 
         shuffle, entpair_as_bag=False, bag_size=0, num_workers=8, 
