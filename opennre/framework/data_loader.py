@@ -268,24 +268,26 @@ class BagREDataset(data.Dataset):
                 prec (precision) and rec (recall) are sorted in the decreasing order of the score.
                 f1 is the max f1 score of those precison-recall points
         """
-        sorted_pred_result = sorted(pred_result, key=lambda x: x['score'], reverse=True)
+        # sorted_pred_result = sorted(pred_result, key=lambda x: x['score'], reverse=True)
         prec = []
         rec = []
         correct = 0
-        total = len(self.facts)
-        for i, item in enumerate(sorted_pred_result):
-            if (item['entpair'][0], item['entpair'][1], item['relation']) in self.facts:
+        total = len(pred_result)
+        for i, item in enumerate(pred_result):
+            entity1, entity2, predict, score, groud_truth = item['entpair'][0], item['entpair'][1], item['predict'], item['score'], item['groud_truth']
+            if predict == groud_truth:
                 correct += 1
-            prec.append(float(correct) / float(i + 1))
-            rec.append(float(correct) / float(total))
+            # prec.append(float(correct) / float(i + 1))
+            # rec.append(float(correct) / float(total))
         #准确率好像有问题，计算时entpair是不需要提供的
-        # acc = float(correct) / float(total)
-        auc = sklearn.metrics.auc(x=rec, y=prec)
-        np_prec = np.array(prec)
-        np_rec = np.array(rec) 
-        f1 = (2 * np_prec * np_rec / (np_prec + np_rec + 1e-20)).max()
-        mean_prec = np_prec.mean()
-        return {'micro_p': np_prec, 'micro_r': np_rec, 'micro_p_mean': mean_prec, 'micro_f1': f1, 'auc': auc, 'acc':'None'}
+        acc = float(correct) / float(total)
+        # auc = sklearn.metrics.auc(x=rec, y=prec)
+        # np_prec = np.array(prec)
+        # np_rec = np.array(rec)
+        # f1 = (2 * np_prec * np_rec / (np_prec + np_rec + 1e-20)).max()
+        # mean_prec = np_prec.mean()
+        # return {'micro_p': np_prec, 'micro_r': np_rec, 'micro_p_mean': mean_prec, 'micro_f1': f1, 'auc': auc, 'acc': acc}
+        return {'acc': acc}
 
 def BagRELoader(path, rel2id, tokenizer, batch_size, 
         shuffle, entpair_as_bag=False, bag_size=0, num_workers=8, 
@@ -302,3 +304,6 @@ def BagRELoader(path, rel2id, tokenizer, batch_size,
             num_workers=num_workers,
             collate_fn=collate_fn)
     return data_loader
+
+if __name__ == '__main__':
+    pred_result = "hello"

@@ -25,7 +25,7 @@ def doargs():
     parser.add_argument('--do_test', action='store_true', help='测试模型')
     parser.add_argument('--english', action='store_true', help='使用英语的word2vec的，如果数据集是英文的，那么用这个，例如用wiki80时选择这个')
     # Data
-    parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'], help='选择best checkpoint时使用哪个 Metric')
+    parser.add_argument('--metric', default='acc', choices=['micro_f1', 'acc'], help='选择best checkpoint时使用哪个 Metric')
     parser.add_argument('--dataset', default='wiki80', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
             help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
     parser.add_argument('--train_file', default='', type=str, help='训练数据集')
@@ -152,15 +152,18 @@ def dotrain(metric):
 
 def dotest(ckpt):
     #加载训练好的模型，开始测试
-    myframe.load_state_dict(torch.load(ckpt)['state_dict'])
+    if torch.cuda.is_available():
+        myframe.load_state_dict(torch.load(ckpt)['state_dict'])
+    else:
+        myframe.load_state_dict(torch.load(ckpt, map_location='cpu')['state_dict'])
     result = myframe.eval_model(myframe.test_loader)
 
     #打印结果
     logging.info('测试集结果:')
     logging.info('Accuracy: {}'.format(result['acc']))
-    logging.info('Micro precision: {}'.format(result['micro_p']))
-    logging.info('Micro recall: {}'.format(result['micro_r']))
-    logging.info('Micro F1: {}'.format(result['micro_f1']))
+    # logging.info('Micro precision: {}'.format(result['micro_p']))
+    # logging.info('Micro recall: {}'.format(result['micro_r']))
+    # logging.info('Micro F1: {}'.format(result['micro_f1']))
 
 
 if __name__ == '__main__':

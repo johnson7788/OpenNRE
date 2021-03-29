@@ -205,13 +205,13 @@ python example/train_supervised_cnn.py --do_train --do_test --dataset liter --wo
 #使用PCNN测试 Chinese-Literature-NER-RE-Dataset
 ```buildoutcfg
 python example/train_bag_pcnn_att.py  --do_train --do_test --dataset liter --word_embedding_size 300 --batch_size 8
-2021-03-25 14:58:16,818 - root - INFO - === Epoch 32 train ===
-100%|██████████| 198/198 [00:08<00:00, 24.15it/s, acc=0.911, loss=0.255, pos_acc=0.906]
-2021-03-25 14:58:25,018 - root - INFO - === Epoch 32 val ===
-100%|██████████| 29/29 [00:00<00:00, 45.51it/s]
-2021-03-25 14:58:25,669 - root - INFO - 指标名称: micro_f1, 当前的指标: 0.7513906718014548, 最好的指标: 0.7487772343263672
-2021-03-25 14:58:25,669 - root - INFO - 获得了更好的metric 0.7513906718014548,保存模型
-2021-03-25 14:58:25,669 - root - INFO - AUC: 0.8201, Micro F1: 0.7514, Accuracy: None
+2021-03-29 13:00:43,722 - root - INFO - === Epoch 40 train ===
+100%|██████████| 199/199 [00:09<00:00, 21.81it/s, acc=0.926, loss=0.215, pos_acc=0.925]
+2021-03-29 13:00:52,846 - root - INFO - === Epoch 40 val ===
+100%|██████████| 29/29 [00:00<00:00, 32.28it/s]
+2021-03-29 13:00:53,746 - root - INFO - 指标名称: acc, 当前的指标: 0.6725082146768894, 最好的指标: 0.6714129244249726
+2021-03-29 13:00:53,746 - root - INFO - 获得了更好的metric 0.6725082146768894,保存模型
+2021-03-29 13:00:53,746 - root - INFO -  Accuracy: 0.6725082146768894
 
 ```
 
