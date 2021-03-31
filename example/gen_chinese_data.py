@@ -5,7 +5,7 @@
 # @Author: johnson
 # @Contact : github: johnson7788
 # @Desc  : 根据Chinese-Literature-NER-RE-Dataset提供的数据格式，生成我们需要的训练数据格式
-# 由于Chinese-Literature-NER-RE-Dataset是文档级的数据，所以其实需要更高效的训练和预测方法
+# 由于Chinese-Literature-NER-RE-Dataset是文档级的数据，所以其实需要更高效的训练和预测方法，例如图卷积的网络
 import os
 import json
 import re
