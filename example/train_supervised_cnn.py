@@ -17,29 +17,28 @@ parser.add_argument('--only_test', action='store_true',
 
 # Data
 parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'],
-        help='Metric for picking up best checkpoint')
-parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred'], 
-        help='Dataset. If not none, the following args can be ignored')
+                    help='选择best checkpoint时使用哪个 Metric')
+parser.add_argument('--dataset', default='wiki80', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
+                    help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
 parser.add_argument('--train_file', default='', type=str,
-        help='Training data file')
+                    help='训练数据集')
 parser.add_argument('--val_file', default='', type=str,
-        help='Validation data file')
+                    help='验证数据集')
 parser.add_argument('--test_file', default='', type=str,
-        help='Test data file')
+                    help='测试数据集')
 parser.add_argument('--rel2id_file', default='', type=str,
-        help='Relation to ID file')
+                    help='关系到id的映射文件')
 
-# Hyper-parameters
-parser.add_argument('--batch_size', default=32, type=int,
-        help='Batch size')
-parser.add_argument('--lr', default=1e-1, type=float,
-        help='Learning rate')
+parser.add_argument('--batch_size', default=16, type=int,
+                    help='Batch size')
+parser.add_argument('--lr', default=2e-5, type=float,
+                    help='Learning rate')
+parser.add_argument('--max_length', default=128, type=int,
+                    help='最大序列长度')
+parser.add_argument('--max_epoch', default=3, type=int,
+                    help='最大训练的epoch')
 parser.add_argument('--weight_decay', default=1e-5, type=float,
-        help='Weight decay')
-parser.add_argument('--max_length', default=40, type=int,
-        help='Maximum sentence length')
-parser.add_argument('--max_epoch', default=100, type=int,
-        help='Max number of training epochs')
+                    help='Weight decay')
 
 args = parser.parse_args()
 

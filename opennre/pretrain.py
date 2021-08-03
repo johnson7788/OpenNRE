@@ -96,6 +96,8 @@ def download(name, root_path=default_root_path):
         download_tacred(root_path=root_path)
     elif name == 'glove':
         download_glove(root_path=root_path)
+    elif name == 'liter':
+        pass
     elif name == 'bert_base_uncased':
         download_bert_base_uncased(root_path=root_path)
     else:

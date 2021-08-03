@@ -151,7 +151,7 @@ class SentenceRE(nn.Module):
             result = self.eval_model(self.val_loader) 
             logging.info('Metric {} current / best: {} / {}'.format(metric, result[metric], best_metric))
             if result[metric] > best_metric:
-                logging.info(f"发现了最近的metric {result[metric]},保存模型")
+                logging.info(f"获得了更好的metric {result[metric]},保存模型")
                 folder_path = '/'.join(self.ckpt.split('/')[:-1])
                 if not os.path.exists(folder_path):
                     os.mkdir(folder_path)
