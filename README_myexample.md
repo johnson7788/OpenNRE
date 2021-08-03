@@ -2,29 +2,36 @@
 ## 例如benchmark/liter
 标签文件
 ```
-{"Family": 0, "Social": 1, "Ownership": 2, "Part-Whole": 3, "Located": 4, "General-Special": 5, "Use": 6, "Create": 7, "Near": 8}
+{"否": 0, "是": 1}
 ```
 具体数据
 ```
 {
-    "text":"洗心，方得以革面。从四川九寨黄龙归来一周了，我并未发生担心中的紫外线灼伤，脸疼起皮什么的。而在这临近入冬燥燥的深秋，印堂脸颊更倍觉光润舒畅起来。
-好像是30多年前，在新疆部队刚当兵时，看过九寨沟内容的故事片或纪录片，只记得",
+    "text":"出门回来、一定要彻底卸妆
+lirosa水霜、冻膜、卸妆啫喱还有香奈儿山茶花洗面奶都是无限回购。",
     "h":{
-        "name":"黄龙",
-        "id":"T3",
+        "name":"lirosa水霜",
+        "id":"VKZH9J5DW8",
         "pos":[
-            14,
-            16
+            13,
+            21
         ]
     },
     "t":{
-        "name":"四川",
-        "id":"T1",
+        "name":"啫喱",
+        "id":"U7G1VDPYTG",
         "pos":[
-            10,
-            12
+            27,
+            29
         ]
     },
-    "relation":"Part-Whole"
+    "relation":"否"
 }
 ```
+
+# 模型是从huggface下载好的
+#训练模型, 使用macbert模型
+python train_supervised_bert.py --pretrain_path pretrain/mac_bert_model --dataset brand --pooler entity --do_train --do_test --batch_size 32 --max_length 256 --max_epoch 10
+
+#使用中文bert模型
+python train_supervised_bert.py --pretrain_path pretrain/bert_model --dataset brand --pooler entity --do_train --do_test --batch_size 32 --max_length 256 --max_epoch 10
