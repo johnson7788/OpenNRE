@@ -98,10 +98,12 @@ def download(name, root_path=default_root_path):
         download_glove(root_path=root_path)
     elif name == 'liter':
         pass
+    elif name == 'brand':
+        pass
     elif name == 'bert_base_uncased':
         download_bert_base_uncased(root_path=root_path)
     else:
-        raise Exception('Cannot find corresponding data.')
+        raise Exception('不能找到对应的数据')
 
 def get_model(model_name, root_path=default_root_path):
     check_root()

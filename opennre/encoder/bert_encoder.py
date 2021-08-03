@@ -16,7 +16,7 @@ class BERTEncoder(nn.Module):
         self.blank_padding = blank_padding
         self.hidden_size = 768
         self.mask_entity = mask_entity
-        logging.info('Loading BERT pre-trained checkpoint.')
+        logging.info(f'加载预训练的 BERT pre-trained checkpoint: {pretrain_path}')
         self.bert = BertModel.from_pretrained(pretrain_path)
         self.tokenizer = BertTokenizer.from_pretrained(pretrain_path)
 
@@ -111,7 +111,7 @@ class BERTEntityEncoder(nn.Module):
         self.blank_padding = blank_padding
         self.hidden_size = 768 * 2
         self.mask_entity = mask_entity
-        logging.info('加载 BERT pre-trained checkpoint.')
+        logging.info(f'加载预训练的 BERT pre-trained checkpoint: {pretrain_path}')
         self.bert = BertModel.from_pretrained(pretrain_path)
         self.tokenizer = BertTokenizer.from_pretrained(pretrain_path)
         self.linear = nn.Linear(self.hidden_size, self.hidden_size)

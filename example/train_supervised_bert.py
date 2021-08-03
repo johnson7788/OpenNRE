@@ -11,8 +11,8 @@ import logging
 
 def doargs():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pretrain_path', default='bert-base-uncased',
-                        help='Pre-trained ckpt path / model name (hugginface)')
+    parser.add_argument('--pretrain_path', default='pretrain/bert_model',
+                        help='预训练的模型的名字，默认英文的忽略大小写的bert, 或者给定模型下载好的路径，从路径中加载')
     parser.add_argument('--ckpt', default='',
                         help='Checkpoint 位置')
     parser.add_argument('--pooler', default='entity', choices=['cls', 'entity'],
@@ -25,7 +25,7 @@ def doargs():
     # Data
     parser.add_argument('--metric', default='micro_f1', choices=['micro_f1', 'acc'],
                         help='选择best checkpoint时使用哪个 Metric')
-    parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter'],
+    parser.add_argument('--dataset', default='none', choices=['none', 'semeval', 'wiki80', 'tacred', 'liter','brand'],
                         help='Dataset. 如果数据集不为none，那么需要指定每个单独的训练文件,否则使用几个专用数据集')
     parser.add_argument('--train_file', default='', type=str,
                         help='训练数据集')
