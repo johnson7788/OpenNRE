@@ -173,7 +173,7 @@ def gen_data(source_dir, des_dir):
                     },
                     'relation': relation
                 }
-            data.append(one_data)
+                data.append(one_data)
     print(f"共收集到总的数据条目: {len(data)}, 跳过的空的数据: {empty_result_num}, 非空reuslt的条数{result_num}, 标签为空的数据的条数{empty_labels_num}，标签的个数统计为{labels_cnt}")
     train_file = os.path.join(des_dir, 'brand_train.txt')
     dev_file = os.path.join(des_dir, 'brand_test.txt')

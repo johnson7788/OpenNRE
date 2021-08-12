@@ -221,6 +221,42 @@ python example/train_supervised_bert.py --pretrain_path pretrain/bert-base-uncas
 2021-03-16 02:12:54,763 - root - INFO - Micro F1: 0.8498214285714286
 ```
 
+
+# 测试semeval数据集
+python example/train_supervised_bert.py --pretrain_path bert-base-uncased --dataset semeval --pooler entity --do_train --do_test
+2021-08-12 16:27:15,142 - root - INFO - 加载 RE 数据集 ./benchmark/semeval/semeval_train.txt with 6507 行和19 个关系.
+2021-08-12 16:27:15,200 - root - INFO - 加载 RE 数据集 ./benchmark/semeval/semeval_val.txt with 1493 行和19 个关系.
+2021-08-12 16:27:15,306 - root - INFO - 加载 RE 数据集 ./benchmark/semeval/semeval_test.txt with 2717 行和19 个关系.
+2021-08-12 16:27:15,334 - root - INFO - 检测到GPU可用，使用GPU
+2021-08-12 16:27:17,546 - root - INFO - === Epoch 0 train ===
+100%|███████████████████████████| 407/407 [00:32<00:00, 12.70it/s, acc=0.574, loss=1.42]
+2021-08-12 16:27:49,597 - root - INFO - === Epoch 0 val ===
+评估: 100%|██████████████████████████████████| 94/94 [00:02<00:00, 36.45it/s, acc=0.801]
+2021-08-12 16:27:52,177 - root - INFO - 评估结果 : {'acc': 0.8010716677829873, 'micro_p': 0.8159695817490494, 'micro_r': 0.8730675345809601, 'micro_f1': 0.8435534591194969}.
+2021-08-12 16:27:52,177 - root - INFO - Metric micro_f1 current / best: 0.8435534591194969 / 0
+2021-08-12 16:27:52,177 - root - INFO - 获得了更好的metric 0.8435534591194969,保存模型
+2021-08-12 16:27:52,611 - root - INFO - === Epoch 1 train ===
+100%|███████████████████████████| 407/407 [00:31<00:00, 12.73it/s, acc=0.88, loss=0.401]
+2021-08-12 16:28:24,576 - root - INFO - === Epoch 1 val ===
+评估: 100%|███████████████████████████████████| 94/94 [00:02<00:00, 36.34it/s, acc=0.85]
+2021-08-12 16:28:27,163 - root - INFO - 评估结果 : {'acc': 0.8499665103817816, 'micro_p': 0.8696682464454977, 'micro_r': 0.8958502847843776, 'micro_f1': 0.882565130260521}.
+2021-08-12 16:28:27,163 - root - INFO - Metric micro_f1 current / best: 0.882565130260521 / 0.8435534591194969
+2021-08-12 16:28:27,164 - root - INFO - 获得了更好的metric 0.882565130260521,保存模型
+2021-08-12 16:28:27,901 - root - INFO - === Epoch 2 train ===
+100%|██████████████████████████| 407/407 [00:32<00:00, 12.68it/s, acc=0.956, loss=0.177]
+2021-08-12 16:29:00,008 - root - INFO - === Epoch 2 val ===
+评估: 100%|██████████████████████████████████| 94/94 [00:02<00:00, 36.15it/s, acc=0.848]
+2021-08-12 16:29:02,610 - root - INFO - 评估结果 : {'acc': 0.8479571332886805, 'micro_p': 0.8715083798882681, 'micro_r': 0.8885272579332791, 'micro_f1': 0.8799355358581789}.
+2021-08-12 16:29:02,610 - root - INFO - Metric micro_f1 current / best: 0.8799355358581789 / 0.882565130260521
+2021-08-12 16:29:02,610 - root - INFO - Best micro_f1 on val set: 0.882565
+评估: 100%|████████████████████████████████| 170/170 [00:04<00:00, 35.91it/s, acc=0.842]
+2021-08-12 16:29:07,473 - root - INFO - 评估结果 : {'acc': 0.8421052631578947, 'micro_p': 0.8738156761412575, 'micro_r': 0.8965974370304906, 'micro_f1': 0.8850599781897494}.
+2021-08-12 16:29:07,473 - root - INFO - Test set results:
+2021-08-12 16:29:07,473 - root - INFO - Accuracy: 0.8421052631578947
+2021-08-12 16:29:07,473 - root - INFO - Micro precision: 0.8738156761412575
+2021-08-12 16:29:07,473 - root - INFO - Micro recall: 0.8965974370304906
+2021-08-12 16:29:07,473 - root - INFO - Micro F1: 0.8850599781897494
+
 ## Google Group
 
 If you want to receive our update news or take part in discussions, please join our [Google Group](https://groups.google.com/forum/#!forum/opennre/join)
