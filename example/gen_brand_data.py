@@ -184,13 +184,13 @@ def gen_data(source_dir, des_dir):
     test_data = data[train_num+dev_num:]
     with open(train_file, 'w', encoding='utf-8') as f:
         for d in train_data:
-            f.write(json.dumps(d) + '\n')
+            f.write(json.dumps(d,ensure_ascii=False) + '\n')
     with open(dev_file, 'w', encoding='utf-8') as f:
         for d in dev_data:
-            f.write(json.dumps(d)+ '\n')
+            f.write(json.dumps(d,ensure_ascii=False)+ '\n')
     with open(test_file, 'w', encoding='utf-8') as f:
         for d in test_data:
-            f.write(json.dumps(d)+ '\n')
+            f.write(json.dumps(d,ensure_ascii=False)+ '\n')
     print(f"训练集数量{len(train_data)}, 测试集数量{len(test_data)},开发集数量{len(dev_data)}")
 
 if __name__ == '__main__':
