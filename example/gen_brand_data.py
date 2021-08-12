@@ -77,7 +77,7 @@
   "predictions": []
 }
 """
-
+import collections
 import os
 import json
 import re
@@ -111,6 +111,7 @@ def gen_data(source_dir, des_dir):
     files = os.listdir(source_dir)
     # 过滤出标注的文件
     json_files = [f for f in files if f.endswith('.json')]
+    labels_cnt = collections.Counter()
     for jfile in json_files:
         jfile_path = os.path.join(source_dir, jfile)
         with open(jfile_path, 'r') as f:
@@ -156,6 +157,8 @@ def gen_data(source_dir, des_dir):
                 t_name = t_value['text']
                 #校验数据
                 assert relation in ["是","否"]
+                # 统计标签
+                labels_cnt[relation] += 1
                 one_data = {
                     'text': text,
                     'h': {
@@ -171,7 +174,7 @@ def gen_data(source_dir, des_dir):
                     'relation': relation
                 }
             data.append(one_data)
-    print(f"共收集到总的数据条目: {len(data)}, 跳过的空的数据: {empty_result_num}, 非空reuslt的条数{result_num}, 标签为空的数据的条数{empty_labels_num}")
+    print(f"共收集到总的数据条目: {len(data)}, 跳过的空的数据: {empty_result_num}, 非空reuslt的条数{result_num}, 标签为空的数据的条数{empty_labels_num}，标签的个数统计为{labels_cnt}")
     train_file = os.path.join(des_dir, 'brand_train.txt')
     dev_file = os.path.join(des_dir, 'brand_test.txt')
     test_file = os.path.join(des_dir, 'brand_val.txt')
