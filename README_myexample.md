@@ -38,36 +38,103 @@ python train_supervised_bert.py --pretrain_path pretrain/mac_bert_model --datase
 共收集到总的数据条目: 13248, 跳过的空的数据: 153, 非空reuslt的条数3347, 标签为空的数据的条数2，标签的个数统计为Counter({'否': 9051, '是': 4197})
 训练集数量10598, 测试集数量1326,开发集数量1324
 python train_supervised_bert.py --pretrain_path pretrain/bert_model --dataset brand --pooler entity --do_train --do_test --batch_size 32 --max_length 256 --max_epoch 10
-2021-08-12 18:07:58,316 - root - INFO - 参数:
-2021-08-12 18:07:58,316 - root - INFO -     pretrain_path: pretrain/bert_model
-2021-08-12 18:07:58,316 - root - INFO -     ckpt: brand_pretrain/bert_model_entity
-2021-08-12 18:07:58,316 - root - INFO -     pooler: entity
-2021-08-12 18:07:58,316 - root - INFO -     do_train: True
-2021-08-12 18:07:58,316 - root - INFO -     do_test: True
-2021-08-12 18:07:58,316 - root - INFO -     mask_entity: False
-2021-08-12 18:07:58,316 - root - INFO -     metric: micro_f1
-2021-08-12 18:07:58,316 - root - INFO -     dataset: brand
-2021-08-12 18:07:58,316 - root - INFO -     train_file: ./benchmark/brand/brand_train.txt
-2021-08-12 18:07:58,316 - root - INFO -     val_file: ./benchmark/brand/brand_val.txt
-2021-08-12 18:07:58,316 - root - INFO -     test_file: ./benchmark/brand/brand_test.txt
-2021-08-12 18:07:58,316 - root - INFO -     rel2id_file: ./benchmark/brand/brand_rel2id.json
-2021-08-12 18:07:58,316 - root - INFO -     batch_size: 32
-2021-08-12 18:07:58,316 - root - INFO -     lr: 2e-05
-2021-08-12 18:07:58,316 - root - INFO -     max_length: 128
-2021-08-12 18:07:58,316 - root - INFO -     max_epoch: 10
-2021-08-12 18:07:58,317 - root - INFO - 加载预训练的 BERT pre-trained checkpoint: pretrain/bert_model
-Some weights of the model checkpoint at pretrain/bert_model were not used when initializing BertModel: ['cls.predictions.decoder.bias', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.decoder.weight']
+2021-08-16 15:08:52,443 - root - INFO - 参数:
+2021-08-16 15:08:52,443 - root - INFO -     pretrain_path: pretrain/bert_model
+2021-08-16 15:08:52,443 - root - INFO -     ckpt: brand_pretrain/bert_model_entity
+2021-08-16 15:08:52,444 - root - INFO -     pooler: entity
+2021-08-16 15:08:52,444 - root - INFO -     do_train: True
+2021-08-16 15:08:52,444 - root - INFO -     do_test: True
+2021-08-16 15:08:52,444 - root - INFO -     mask_entity: False
+2021-08-16 15:08:52,444 - root - INFO -     metric: micro_f1
+2021-08-16 15:08:52,444 - root - INFO -     dataset: brand
+2021-08-16 15:08:52,444 - root - INFO -     train_file: ./benchmark/brand/brand_train.txt
+2021-08-16 15:08:52,444 - root - INFO -     val_file: ./benchmark/brand/brand_val.txt
+2021-08-16 15:08:52,444 - root - INFO -     test_file: ./benchmark/brand/brand_test.txt
+2021-08-16 15:08:52,444 - root - INFO -     rel2id_file: ./benchmark/brand/brand_rel2id.json
+2021-08-16 15:08:52,444 - root - INFO -     batch_size: 32
+2021-08-16 15:08:52,444 - root - INFO -     lr: 2e-05
+2021-08-16 15:08:52,444 - root - INFO -     max_length: 128
+2021-08-16 15:08:52,444 - root - INFO -     max_epoch: 10
+2021-08-16 15:08:52,444 - root - INFO - 加载预训练的 BERT pre-trained checkpoint: pretrain/bert_model
+Some weights of the model checkpoint at pretrain/bert_model were not used when initializing BertModel: ['cls.predictions.decoder.bias', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.weight', 'cls.predictions.bias', 'cls.predictions.decoder.weight']
 - This IS expected if you are initializing BertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
 - This IS NOT expected if you are initializing BertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
-2021-08-12 18:08:00,022 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_train.txt with 10598 行和2 个关系.
-2021-08-12 18:08:00,140 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_val.txt with 1326 行和2 个关系.
-2021-08-12 18:08:00,257 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_test.txt with 1324 行和2 个关系.
-2021-08-12 18:08:00,286 - root - INFO - 检测到GPU可用，使用GPU
-2021-08-12 18:08:02,491 - root - INFO - === Epoch 0 train ===
-100%|██████████| 332/332 [01:08<00:00,  4.86it/s, acc=0.745, loss=0.537]
-2021-08-12 18:09:10,768 - root - INFO - === Epoch 0 val ===
-评估: 100%|██████████| 42/42 [00:05<00:00,  8.38it/s, acc=0.801]
-2021-08-12 18:09:15,782 - root - INFO - 评估结果 : {'acc': 0.8009049773755657, 'micro_p': 0.8009049773755657, 'micro_r': 0.8009049773755657, 'micro_f1': 0.8009049773755657}.
+2021-08-16 15:08:54,180 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_train.txt with 10598 行和2 个关系.
+2021-08-16 15:08:54,298 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_val.txt with 1326 行和2 个关系.
+2021-08-16 15:08:54,416 - root - INFO - 加载 RE 数据集 ./benchmark/brand/brand_test.txt with 1324 行和2 个关系.
+2021-08-16 15:08:54,447 - root - INFO - 检测到GPU可用，使用GPU
+2021-08-16 15:08:56,674 - root - INFO - === Epoch 0 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.95it/s, acc=0.75, loss=0.528] 
+2021-08-16 15:10:03,678 - root - INFO - === Epoch 0 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.71it/s, acc=0.759]
+2021-08-16 15:10:08,500 - root - INFO - 评估结果 : {'acc': 0.7594268476621417, 'micro_p': 0.7594268476621417, 'micro_r': 0.7594268476621417, 'micro_f1': 0.7594268476621419}.
+2021-08-16 15:10:08,500 - root - INFO - Metric micro_f1 current / best: 0.7594268476621419 / 0
+2021-08-16 15:10:08,500 - root - INFO - 获得了更好的metric 0.7594268476621419,保存模型
+2021-08-16 15:10:09,188 - root - INFO - === Epoch 1 train ===
+100%|██████████| 332/332 [01:06<00:00,  4.98it/s, acc=0.809, loss=0.429]
+2021-08-16 15:11:15,790 - root - INFO - === Epoch 1 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.73it/s, acc=0.81] 
+2021-08-16 15:11:20,604 - root - INFO - 评估结果 : {'acc': 0.8099547511312217, 'micro_p': 0.8099547511312217, 'micro_r': 0.8099547511312217, 'micro_f1': 0.8099547511312217}.
+2021-08-16 15:11:20,604 - root - INFO - Metric micro_f1 current / best: 0.8099547511312217 / 0.7594268476621419
+2021-08-16 15:11:20,604 - root - INFO - 获得了更好的metric 0.8099547511312217,保存模型
+2021-08-16 15:11:21,302 - root - INFO - === Epoch 2 train ===
+100%|██████████| 332/332 [01:06<00:00,  4.97it/s, acc=0.84, loss=0.357] 
+2021-08-16 15:12:28,068 - root - INFO - === Epoch 2 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.71it/s, acc=0.825]
+2021-08-16 15:12:32,894 - root - INFO - 评估结果 : {'acc': 0.8250377073906485, 'micro_p': 0.8250377073906485, 'micro_r': 0.8250377073906485, 'micro_f1': 0.8250377073906485}.
+2021-08-16 15:12:32,894 - root - INFO - Metric micro_f1 current / best: 0.8250377073906485 / 0.8099547511312217
+2021-08-16 15:12:32,894 - root - INFO - 获得了更好的metric 0.8250377073906485,保存模型
+2021-08-16 15:12:33,554 - root - INFO - === Epoch 3 train ===
+100%|██████████| 332/332 [01:06<00:00,  4.96it/s, acc=0.857, loss=0.318]
+2021-08-16 15:13:40,473 - root - INFO - === Epoch 3 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.69it/s, acc=0.807]
+2021-08-16 15:13:45,309 - root - INFO - 评估结果 : {'acc': 0.8069381598793364, 'micro_p': 0.8069381598793364, 'micro_r': 0.8069381598793364, 'micro_f1': 0.8069381598793365}.
+2021-08-16 15:13:45,309 - root - INFO - Metric micro_f1 current / best: 0.8069381598793365 / 0.8250377073906485
+2021-08-16 15:13:45,310 - root - INFO - === Epoch 4 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.94it/s, acc=0.865, loss=0.296]
+2021-08-16 15:14:52,566 - root - INFO - === Epoch 4 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.69it/s, acc=0.821]
+2021-08-16 15:14:57,398 - root - INFO - 评估结果 : {'acc': 0.8205128205128205, 'micro_p': 0.8205128205128205, 'micro_r': 0.8205128205128205, 'micro_f1': 0.8205128205128205}.
+2021-08-16 15:14:57,398 - root - INFO - Metric micro_f1 current / best: 0.8205128205128205 / 0.8250377073906485
+2021-08-16 15:14:57,399 - root - INFO - === Epoch 5 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.95it/s, acc=0.872, loss=0.28] 
+2021-08-16 15:16:04,527 - root - INFO - === Epoch 5 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.70it/s, acc=0.825]
+2021-08-16 15:16:09,357 - root - INFO - 评估结果 : {'acc': 0.8250377073906485, 'micro_p': 0.8250377073906485, 'micro_r': 0.8250377073906485, 'micro_f1': 0.8250377073906485}.
+2021-08-16 15:16:09,357 - root - INFO - Metric micro_f1 current / best: 0.8250377073906485 / 0.8250377073906485
+2021-08-16 15:16:09,358 - root - INFO - === Epoch 6 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.93it/s, acc=0.875, loss=0.264]
+2021-08-16 15:17:16,684 - root - INFO - === Epoch 6 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.69it/s, acc=0.811]
+2021-08-16 15:17:21,516 - root - INFO - 评估结果 : {'acc': 0.8107088989441931, 'micro_p': 0.8107088989441931, 'micro_r': 0.8107088989441931, 'micro_f1': 0.8107088989441931}.
+2021-08-16 15:17:21,517 - root - INFO - Metric micro_f1 current / best: 0.8107088989441931 / 0.8250377073906485
+2021-08-16 15:17:21,517 - root - INFO - === Epoch 7 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.93it/s, acc=0.878, loss=0.253]
+2021-08-16 15:18:28,924 - root - INFO - === Epoch 7 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.70it/s, acc=0.814]
+2021-08-16 15:18:33,751 - root - INFO - 评估结果 : {'acc': 0.8144796380090498, 'micro_p': 0.8144796380090498, 'micro_r': 0.8144796380090498, 'micro_f1': 0.8144796380090498}.
+2021-08-16 15:18:33,752 - root - INFO - Metric micro_f1 current / best: 0.8144796380090498 / 0.8250377073906485
+2021-08-16 15:18:33,752 - root - INFO - === Epoch 8 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.93it/s, acc=0.883, loss=0.242]
+2021-08-16 15:19:41,049 - root - INFO - === Epoch 8 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.70it/s, acc=0.819]
+2021-08-16 15:19:45,879 - root - INFO - 评估结果 : {'acc': 0.8190045248868778, 'micro_p': 0.8190045248868778, 'micro_r': 0.8190045248868778, 'micro_f1': 0.8190045248868778}.
+2021-08-16 15:19:45,879 - root - INFO - Metric micro_f1 current / best: 0.8190045248868778 / 0.8250377073906485
+2021-08-16 15:19:45,879 - root - INFO - === Epoch 9 train ===
+100%|██████████| 332/332 [01:07<00:00,  4.93it/s, acc=0.888, loss=0.236]
+2021-08-16 15:20:53,230 - root - INFO - === Epoch 9 val ===
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.68it/s, acc=0.808]
+2021-08-16 15:20:58,069 - root - INFO - 评估结果 : {'acc': 0.808446455505279, 'micro_p': 0.808446455505279, 'micro_r': 0.808446455505279, 'micro_f1': 0.808446455505279}.
+2021-08-16 15:20:58,069 - root - INFO - Metric micro_f1 current / best: 0.808446455505279 / 0.8250377073906485
+2021-08-16 15:20:58,069 - root - INFO - Best micro_f1 on val set: 0.825038
+评估: 100%|██████████| 42/42 [00:04<00:00,  8.66it/s, acc=0.826]
+2021-08-16 15:21:03,038 - root - INFO - 评估结果 : {'acc': 0.8262839879154078, 'micro_p': 0.8262839879154078, 'micro_r': 0.8262839879154078, 'micro_f1': 0.8262839879154078}.
+2021-08-16 15:21:03,038 - root - INFO - Test set results:
+2021-08-16 15:21:03,038 - root - INFO - Accuracy: 0.8262839879154078
+2021-08-16 15:21:03,038 - root - INFO - Micro precision: 0.8262839879154078
+2021-08-16 15:21:03,038 - root - INFO - Micro recall: 0.8262839879154078
+2021-08-16 15:21:03,038 - root - INFO - Micro F1: 0.8262839879154078
+运行成功! Step3: 训练并测试BERT模型
   
 
 ## CLS形式

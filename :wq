@@ -1,0 +1,837 @@
+-------------------------------------------------------------------
+mac 下安装nginx
+brew install nginx
+
+http://nginx.org/en/linux_packages.html#Ubuntu
+
+用服务启动
+brew services start nginx
+brew services restart nginx
+brew services stop nginx
+手动启动
+nginx
+
+停止
+nginx -s stop
+
+#手动reload
+nginx -s reload
+
+# nginx 版本 version
+nginx -v
+
+配置文件
+vim /usr/local/etc/nginx/nginx.conf
+
+http://localhost:8080
+
+# nginx在线配置网站
+https://www.digitalocean.com/community/tools/nginx?global.app.lang=zhCN
+
+文件目录位置
+/usr/local/var/www
+
+
+docker run --name nginx -p 8080:80 -v /Users/admin/git/shopxo:/var/www/html -d richarvey/nginx-php-fpm
+docker run --name nginx -p 8080:80 --link mall:mysql -v /Users/admin/git/shopxo:/var/www/html -d richarvey/nginx-php-fpm
+docker run --name nginx -p 8080:80 --link mall:mysql -v /root/shopxo:/var/www/html -d richarvey/nginx-php-fpm
+
+-------------------------------------------------------------------
+//verify config syntax
+/usr/nginx/sbin/nginx -t -c conf/nginx.conf
+
+#如果你的Nginx是root用户启动的，那么用root用户检测配置
+sudo nginx -t -c /etc/nginx/nginx.conf
+
+-------------------------------------------------------------------
+//example
+#cat nginx.conf
+user www-data;
+
+worker_processes auto;
+worker_rlimit_nofile 65535;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /run/nginx.pid;
+
+
+events {
+    worker_connections 65535;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  with_x_forwarded_for '$http_x_forwarded_for - $remote_user [$time_local] '
+                                     '"$request" $status $body_bytes_sent "$http_referer" '
+                                     '"$http_user_agent"';
+
+    log_format	with_x_client_ip '$http_x_client_ip - $remote_user [$time_local] '
+                                 '"$request" $status $body_bytes_sent "$http_referer" '
+                                 '"$http_user_agent"';
+
+    access_log  /var/log/nginx/access.log  combined;
+
+    server_tokens   off;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+    ssl_prefer_server_ciphers on;
+
+    sendfile        on;
+    tcp_nopush      on;
+    tcp_nodelay     on;
+    client_max_body_size 2048k;
+    keepalive_timeout 65;
+
+    gzip on;
+    gzip_disable "msie6";
+    gzip_http_version 1.1;
+    gzip_min_length 10k;
+    gzip_comp_level 3;
+    gzip_types text/plain text/css application/javascript application/json
+               application/xml application/xhtml+xml text/csv;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+
+#默认网站配置
+#    server {
+#        listen       80 default_server;
+#        listen       [::]:80 default_server;
+#        server_name  _;
+#        root         /usr/share/nginx/html;
+#
+#        # Load configuration files for the default server block.
+#        include /etc/nginx/default.d/*.conf;
+#
+#        location / {
+#        }
+#
+#        error_page 404 /404.html;
+#            location = /40x.html {
+#        }
+#
+#        error_page 500 502 503 504 /50x.html;
+#            location = /50x.html {
+#        }
+#    }
+#
+#
+//bash-4.4# cd /etc/nginx/conf.d/
+bash-4.4# ls
+banner-master.wecash.in.conf
+bash-4.4# cat banner-master.wecash.in.conf
+server {
+    listen 80;
+    server_name banner-master.wecash.in;
+
+    access_log /var/log/nginx/banner-master.wecash.in.log combined;
+    error_log /var/log/nginx/banner-master.wecash.in.error.log warn;
+
+    root /data/websites/banner-manager-frontend;
+
+    location / {    index user/login.html;    }
+
+    location = /robots.txt {
+    add_header  Content-Type  text/plain;
+    return 200 "User-agent: *\nDisallow: /\n";
+    }
+
+location /advertisement/ {
+        proxy_next_upstream error timeout http_500 http_503 http_502 http_504 http_404;
+        proxy_pass http://advertisement-platform-web-master-cashloan-api:9780;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout  180;
+    }
+}
+
+-------------------------------------------------------------------
+//Port (listen)
+server {
+  # standard HTTP protocol
+  listen 80;
+  
+  # standard HTTPS protocol
+  listen 443 ssl;
+  
+  # listen on 80 using IPv6
+  listen [::]:80;
+  
+  # listen only on IPv6
+  listen [::]:80 ipv6only=on;
+}
+
+-------------------------------------------------------------------
+//Domain name (server_name)
+server {
+  # Listen to yourdomain.com
+  server_name yourdomain.com;
+  
+  # Listen to multiple domains
+  server_name yourdomain.com www.yourdomain.com;
+  
+  # Listen to all sub-domains
+  server_name *.yourdomain.com;
+  
+  # Listen to all top-level domains
+  server_name yourdomain.*;
+  
+  # Listen to unspecified hostnames (listens to IP address itself)
+  server_name "";
+}
+
+-------------------------------------------------------------------
+//Access Logging (access_log)
+server {
+  # Relative or full path to log file
+  access_log /path/to/file.log;
+  
+  # Turn 'on' or 'off'
+  access_log on;
+}
+
+-------------------------------------------------------------------
+//Miscellaneous (gzip, client_max_body_size)
+//杂项
+server {
+  # Turn gzip compression 'on' or 'off'
+  gzip on;
+  
+  # Limit client body size to 10mb
+  client_max_body_size 10M;
+}
+
+-------------------------------------------------------------------
+//Serving Files
+//Static assets
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location / {
+  	root /path/to/website;
+  }
+}
+-------------------------------------------------------------------
+//Static assets with HTML5 History Mode
+server {
+  listen 80;
+  server_name yourdomain.com;
+  root /path/to/website;
+  
+  location / {
+  	try_files $uri $uri/ /index.html;
+  }
+}
+
+-------------------------------------------------------------------
+//Redirects
+//301 Permanent
+server {
+  listen 80;
+  server_name www.yourdomain.com;
+  return 301 http://yourdomain.com$request_uri;
+}
+
+//302 Temporary
+server {
+  listen 80;
+  server_name yourdomain.com;
+  return 302 http://otherdomain.com;
+}
+//Redirect on specific URL
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location /redirect-url {
+	return 301 http://otherdomain.com;  
+  }
+}
+
+-------------------------------------------------------------------
+//Reverse Proxy
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location / {
+    proxy_pass http://0.0.0.0:3000;
+    # where 0.0.0.0:3000 is your Node.js Server bound on 0.0.0.0 listing on port 3000
+  }
+}
+
+//Basic+
+upstream node_js {
+  server 0.0.0.0:3000;
+  # where 0.0.0.0:3000 is your Node.js Server bound on 0.0.0.0 listing on port 3000
+}
+
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location / {
+    proxy_pass http://node_js;
+  }
+}
+
+
+server {
+  listen 80;
+  server_name yourdomain.com;
+
+  location /8082 {
+    proxy_pass http://192.168.50.139:8082;
+  }
+
+  location /8083 {
+    proxy_pass http://192.168.50.139:8083;
+  }
+
+  location /8084 {
+    proxy_pass http://192.168.50.139:8084;
+  }
+
+  location /8085 {
+    proxy_pass http://192.168.50.139:8085;
+  }
+
+  location /8086 {
+    proxy_pass http://192.168.50.139:8086;
+  }
+
+  location /8087 {
+    proxy_pass http://192.168.50.139:8087;
+  }
+
+  location /8088 {
+    proxy_pass http://192.168.50.139:8088;
+  }
+
+  location /8089 {
+    proxy_pass http://192.168.50.139:8089;
+  }
+
+  location /8080 {
+    proxy_pass http://192.168.50.139:8080;
+  }
+
+}
+
+-------------------------------------------------------------------
+//Upgraded Connection (Recommended for Node.js Applications)
+Useful for Node.js applications with support for WebSockets like socket.io.
+
+upstream node_js {
+  server 0.0.0.0:3000;
+}
+
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location / {
+    proxy_pass http://node_js;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+	
+    # not required but useful for applications with heavy WebSocket usage
+    # as it increases the default timeout configuration of 60
+    proxy_read_timeout 80;
+  }
+}
+-------------------------------------------------------------------
+//TLS/SSL (HTTPS)
+server {
+  listen 443 ssl;
+  server_name yourdomain.com;
+  
+  ssl on;
+  
+  ssl_certificate /path/to/cert.pem;
+  ssl_certificate_key /path/to/privkey.pem;
+  
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  ssl_trusted_certificate /path/to/fullchain.pem;
+
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_session_timeout 1d;
+  ssl_session_cache shared:SSL:50m;
+  add_header Strict-Transport-Security max-age=15768000;
+}
+
+# Permanent redirect for HTTP to HTTPS
+server {
+  listen 80;
+  server_name yourdomain.com;
+  return 301 https://$host$request_uri;
+}
+
+-------------------------------------------------------------------
+//Large Scale Applications
+Load Balancing
+Useful for large applications running multiple instances.
+upstream node_js {
+  server 0.0.0.0:3000;
+  server 0.0.0.0:4000;
+  server 123.131.121.122;
+}
+
+server {
+  listen 80;
+  server_name yourdomain.com;
+  
+  location / {
+    proxy_pass http://node_js;
+  }
+}
+-------------------------------------------------------------------
+负载均衡的代理设置
+upstream backend {
+    server backend1.example.com       weight=5;
+    server backend2.example.com:8080;
+    server unix:/tmp/backend3;
+
+    server backup1.example.com:8080   backup;
+    server backup2.example.com:8080   backup;
+}
+
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+    }
+}
+
+-------------------------------------------------------------------
+反向代理配置
+设置nginx的80端口转发监听8000端口
+设置启动一个8000的服务
+python -m SimpleHTTPServer 8000
+
+[root@node-01 nginx]# cat /etc/nginx/conf.d/8000.conf 
+server {
+    listen 80;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+
+#测试
+curl 127.0.0.1:80
+
+UPSTREAM的设置, 可以添加多个UPSTREAM，为了负载均衡
+upstream backend {
+    server 127.0.0.1:9000;
+    server 127.0.0.1:9001;
+}
+
+server {
+    listen 80; 
+    location / {
+        proxy_pass http://backend;
+    }
+}
+
+也可以设置不同的location
+location /some/path/ {
+    proxy_pass http://www.example.com/link/;
+}
+
+如果proxy_pass的网站有302自动跳转，可以这样设置
+server {
+    listen      80;
+    charset     utf-8;
+
+    location / {
+       proxy_pass http://web;
+       proxy_intercept_errors on;
+       error_page 301 302 307 = @handle_redirects;
+    }
+
+    location @handle_redirects {
+       set $orig_loc $upstream_http_location;
+       proxy_pass $orig_loc;
+    }
+}
+
+#针对多网卡，使用127.0.0.1访问example.com/app1, 使用127.0.0.2访问app2
+location /app1/ {
+    proxy_bind 127.0.0.1;
+    proxy_pass http://example.com/app1/;
+}
+
+location /app2/ {
+    proxy_bind 127.0.0.2;
+    proxy_pass http://example.com/app2/;
+}
+
+#rewrite地址，代理时去掉多余的请求路径
+location /blog {
+    rewrite ^/blog(.*) /$1 break;
+    proxy_pass http://127.0.0.1:8181;
+}
+
+location /mail {
+    rewrite ^/mail(.*) /$1 break;
+    proxy_pass http://127.0.0.1:8282;
+}
+
+-------------------------------------------------------------------
+白名单 黑名单配置
+http{
+   ...
+   allow 45.43.23.21;
+   deny all;
+   ...
+}
+
+server{
+    ...
+    allow 45.43.23.21;
+    deny all;
+    ...
+}
+
+
+location / {
+   allow 45.43.23.21;
+   deny all;
+}
+
+
+server {
+  server blog.example.com;
+  allow 45.43.23.21;
+  deny all;
+}
+
+-------------------------------------------------------------------
+nginx 作为http代理服务器
+https://github.com/chobits/ngx_http_proxy_connect_module
+
+yum install gcc gcc-c++  make -y
+yum install rpm-build rpmdevtools -y
+yum install pcre-devel pcre -y
+yum install zlib-devel zlib -y
+yum install openssl-devel openssl -y
+git clone https://github.com/chobits/ngx_http_proxy_connect_module.git
+wget http://nginx.org/download/nginx-1.15.8.tar.gz
+
+按照说明打不同的patch
+nginx version 	enable REWRITE phase 	patch
+1.4.x ~ 1.12.x 	NO 	proxy_connect.patch
+1.4.x ~ 1.12.x 	YES 	proxy_connect_rewrite.patch
+1.13.x ~ 1.14.x 	NO 	proxy_connect_1014.patch
+1.13.x ~ 1.14.x 	YES 	proxy_connect_rewrite_1014.patch
+1.15.2 	YES 	proxy_connect_rewrite_1015.patch
+1.15.4 ~ 1.16.x 	YES 	proxy_connect_rewrite_101504.patch
+1.17.x ~ 1.18.0 	YES 	proxy_connect_rewrite_1018.patch
+
+cd nginx-1.15.8/
+patch -p1 < /root/ngx_http_proxy_connect_module/patch/proxy_connect_rewrite_101504.patch 
+./configure --add-module=/root/ngx_http_proxy_connect_module
+make && make install
+
+#http协议 80端口 -只是监听端口
+server {
+        listen       80;
+	    resolver 114.114.114.114;
+        #server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+	           proxy_pass $scheme://$http_host$request_uri;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+ #https协议(SSL) 443端口 -只是监听端口
+    server {
+        resolver 114.114.114.114; #DNS
+        listen 443;
+        #server_name  localhost; #要做正向代理， 不需要server_name
+        proxy_connect;
+        proxy_connect_allow            443 563;
+        proxy_connect_connect_timeout  10s;
+        proxy_connect_read_timeout     10s;
+        proxy_connect_send_timeout     10s;
+     
+        #access_log /var/log/nginx/http_proxy.access.log main;
+        #error_log /var/log/nginx/http_proxy.error.log;
+     
+        location / {
+            proxy_pass $scheme://$http_host$request_uri;
+        }
+    }
+
+
+-------------------------------------------------------------------
+负载均衡
+包括硬件负载均衡和软件负载均衡, 硬件的例如 F5,TP-Link,Barracuda
+软件的负载均衡，又分为几种，分别真的的是OSI的几层进行, 例如第3层，第4层和第7层
+例如: https://github.com/google/seesaw , 4层
+https://geekflare.com/open-source-load-balancer/
+
+https://github.com/fabiolb/fabio，可用于4层或7层
+
+第3层: 就是VIP，虚拟IP，虚拟IP对应着多个ip
+第4层: TCP proxy, 就是端口转发, 相当于端口映射
+第7层：就是HTTP，类似http代理
+
+-------------------------------------------------------------------
+#完全自动跳转到baidu.com,就是访问8081端口，直接跳到baidu.com，不进行代理
+## Basic reverse proxy server ##
+## backend for 16.32  ##
+upstream uicps  {
+#    server 192.168.16.32:59002 weight=1;
+     server www.baidu.com;
+}
+ 
+## Start 16.32 ##
+server {
+    listen 8081;
+    server_name  localhost;
+ 
+#    access_log  logs/proxy34.access.log  main;
+#    error_log  logs/proxy34.error.log;
+    root   html;
+    index  index.html index.htm index.php;
+ 
+    ## send request back to 16.32 ##
+    location / {
+        proxy_pass  http://uicps;
+ 
+        #Proxy Settings
+        proxy_redirect     off;
+        proxy_set_header   Host     www.baidu.com;  #           $host;不能使用$host变量
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_max_temp_file_size 0;
+        proxy_connect_timeout      90;
+        proxy_send_timeout         90;
+        proxy_read_timeout         90;
+        proxy_buffer_size          4k;
+        proxy_buffers              4 32k;
+        proxy_busy_buffers_size    64k;
+        proxy_temp_file_write_size 64k;
+   }
+}
+
+-------------------------------------------------------------------
+最好使用virtualhost代理的方式，那样最方便了
+反向代理一个网站，记住要代理他所有的url，这样才能保证代理的时候，访问不会出错
+例如，要在本机nginx的80端口下的/8088页面代理其它192.168.50.139:8080服务，那么需要设置
+
+cat /etc/nginx/conf.d/8088.conf
+server {
+    listen 80;
+    server_name  localhost;
+    # access_log  logs/proxy8088.access.log  main;
+    # error_log  logs/proxy8088.error.log;
+ 
+    location /8088 {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/;
+    }
+    location /8088/tasks {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/tasks;
+		# auth_basic "Restricted Content";  #如果设置登录密码
+        # auth_basic_user_file /etc/nginx/.htpasswd;  #密码的位置
+    }
+    location /8088/model {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/model;
+    }
+    location /8088/settings {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/settings;
+    }
+    location /8088/api {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/api;
+    }
+    location /8088/static {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:8088/static;
+    }
+}
+
+
+nginx 全局配置,不太重要，普通配置就可以了
+cat /etc/nginx/nginx.conf
+# Generated by nginxconfig.io
+user                 www-data;
+pid                  /run/nginx.pid;
+worker_processes     auto;
+worker_rlimit_nofile 65535;
+
+# Load modules
+include              /etc/nginx/modules-enabled/*.conf;
+events {
+    multi_accept       on;
+    worker_connections 65535;
+}
+
+http {
+    charset                utf-8;
+    sendfile               on;
+    tcp_nopush             on;
+    tcp_nodelay            on;
+    server_tokens          off;
+    log_not_found          off;
+    types_hash_max_size    2048;
+    types_hash_bucket_size 64;
+    client_max_body_size   16M;
+
+    # MIME
+    include                mime.types;
+    default_type           application/octet-stream;
+
+    # Logging
+    access_log             /var/log/nginx/access.log;
+    error_log              /var/log/nginx/error.log warn;
+
+    # Connection header for WebSocket reverse proxy
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ""      close;
+    }
+
+    map $remote_addr $proxy_forwarded_elem {
+
+        # IPv4 addresses can be sent as-is
+        ~^[0-9.]+$        "for=$remote_addr";
+
+        # IPv6 addresses need to be bracketed and quoted
+        ~^[0-9A-Fa-f:.]+$ "for=\"[$remote_addr]\"";
+
+        # Unix domain socket names cannot be represented in RFC 7239 syntax
+        default           "for=unknown";
+    }
+
+    map $http_forwarded $proxy_add_forwarded {
+
+        # If the incoming Forwarded header is syntactically valid, append to it
+        "~^(,[ \\t]*)*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*([ \\t]*,([ \\t]*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*)?)*$" "$http_forwarded, $proxy_forwarded_elem";
+
+        # Otherwise, replace it
+        default "$proxy_forwarded_elem";
+    }
+
+    # Load configs
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
+
+-------------------------------------------------------------------
+给nginx设置密码，访问时需要密码输入
+#安装工具htpasswd
+sudo apt-get install apache2-utils
+#设置用户名为sammy的用户，并添加密码
+sudo htpasswd -c /etc/nginx/.htpasswd sammy
+
+#在配置中加入auth_basic和 auth_basic_user_file，auth_basic_user_file指定了.htpasswd的位置
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+
+    server_name localhost;
+
+    location / {
+        try_files $uri $uri/ =404;
+        auth_basic "Restricted Content";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+}
+
+-------------------------------------------------------------------
+使用virtualhost的形式的反向代理，这样最方便了, 注意我们给/tasks 网站加了密码
+例如，访问label7081.lavector.com代理到http://192.168.50.139:7081/,那么可以进行如下配置
+# 如果增加其它virtualhost，只需要更改server_name和代理的proxy_pass路径即可
+# 记住，需要修改客户端的host文件, 例如，我们添加了3个访问的virtual host
+192.168.50.189 label7081.lavector.com
+192.168.50.189 label7082.lavector.com
+192.168.50.189 label7083.lavector.com
+
+# cat /etc/nginx/conf.d/label7081.conf
+server {
+    listen 80;
+#    access_log  logs/proxy34.access.log  main;
+#    error_log  logs/proxy34.error.log;
+    server_name label7081.lavector.com www.label7081.lavector.com;
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/;
+    }
+    location /tasks {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/tasks;
+        auth_basic "Restricted Content";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+    location /model {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/model;
+    }
+    location /settings {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/settings;
+    }
+    location /api {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/api;
+    }
+    location /static {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://192.168.50.139:7081/static;
+    }
+}
