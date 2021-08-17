@@ -233,3 +233,17 @@ Some weights of the model checkpoint at pretrain/bert_model were not used when i
 2021-08-12 18:07:20,456 - root - INFO - Micro recall: 0.824773413897281
 2021-08-12 18:07:20,456 - root - INFO - Micro F1: 0.824773413897281
 运行成功! Step3: 训练并测试BERT模型  
+  
+  
+# 模型处理cls类型的训练时的方法
+```
+sent0 = self.tokenizer.tokenize(sentence[:pos_min[0]])
+ent0 = self.tokenizer.tokenize(sentence[pos_min[0]:pos_min[1]])
+sent1 = self.tokenizer.tokenize(sentence[pos_min[1]:pos_max[0]])
+ent1 = self.tokenizer.tokenize(sentence[pos_max[0]:pos_max[1]])
+sent2 = self.tokenizer.tokenize(sentence[pos_max[1]:])
+ent0 = ['[unused0]'] + ent0 + ['[unused1]']
+ent1 = ['[unused2]'] + ent1 + ['[unused3]']
+re_tokens = ['[CLS]'] + sent0 + ent0 + sent1 + ent1 + sent2 + ['[SEP]']
+indexed_tokens = self.tokenizer.convert_tokens_to_ids(re_tokens)
+```

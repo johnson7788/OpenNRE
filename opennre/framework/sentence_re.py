@@ -116,6 +116,7 @@ class SentenceRE(nn.Module):
             avg_loss = AverageMeter()
             avg_acc = AverageMeter()
             t = tqdm(self.train_loader)
+            # enumerate这里把dataset进行tokenizer化
             for iter, data in enumerate(t):
                 if torch.cuda.is_available():
                     for i in range(len(data)):
